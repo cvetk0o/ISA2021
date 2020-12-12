@@ -1,0 +1,18 @@
+<p>
+  sign-in works!
+</p>
+
+
+
+<form [formGroup]="signInForm" (submit) ="signIn()">
+  <label for="email">Email</label>
+  <input formControlName="email" id="email" />
+  <app-control-message [control]="signInForm.get('email')"></app-control-message>
+
+
+  <label for="Password">Password</label>
+  <input formControlName="password" id="password"  type="password"/>
+  <app-control-message [control]="signInForm.get('password')"></app-control-message>
+
+  <button type="submit" [disabled] = "!signInForm.valid">Submit</button>
+</form>

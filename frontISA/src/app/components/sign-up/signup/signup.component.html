@@ -1,0 +1,48 @@
+
+<form [formGroup]="signUpForm" (submit)="signUp()">
+  <label for="name">Name</label>
+  <input formControlName="name" id="name" />
+  <app-control-message [control]="signUpForm.get('name')"></app-control-message>
+  
+  <label for="name">LastName</label>
+  <input formControlName="lastname" id="lastname" />
+  <app-control-message [control]="signUpForm.get('lastname')"></app-control-message>
+  
+  <label for="email">Email</label>
+  <input formControlName="email" id="email" />
+  <app-control-message [control]="signUpForm.get('email')"></app-control-message>
+
+
+  <label for="Password">Password</label>
+  <input formControlName="password1" id="password1"  type="password"/>
+  <app-control-message [control]="signUpForm.get('password1')"></app-control-message>
+
+  <label for="Password">Password2</label>
+  <input formControlName="password2" id="password2"  type="password"/>
+  <app-control-message [control]="signUpForm.get('password2')"></app-control-message>
+
+  <label for="country">Country</label>
+  <input formControlName="country" id="city" />
+  <app-control-message [control]="signUpForm.get('country')"></app-control-message>
+
+
+  <label for="email">City</label>
+  <input formControlName="city" id="city" />
+  <app-control-message [control]="signUpForm.get('city')"></app-control-message>
+
+  <label for="email">Street</label>
+  <input formControlName="street" id="street" />
+  <app-control-message [control]="signUpForm.get('street')"></app-control-message>
+
+
+  <label for="phoneNumber">Phone</label>
+  <input formControlName="phoneNumber" id="phoneNumber" />
+  <app-control-message [control]="signUpForm.get('phoneNumber')"></app-control-message>
+
+
+  
+  
+  
+
+  <button type="submit" [disabled]="!signUpForm.valid">Submit</button>
+</form>
