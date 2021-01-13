@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 
 @Component({
@@ -8,7 +9,10 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
 })
 export class NavigationBarComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private router: Router
+    
+      ) { }
 
   ngOnInit() {
   }
@@ -16,7 +20,30 @@ export class NavigationBarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-  
+    this.router.navigate(['/']);
   }
 
+  signedIn() {
+    return this.authService.currentUserValue != null;
+  }
+
+
+  checkHome() {
+    
+    if( this.authService.currentUserValue != null ) {
+          switch (this.authService.currentUserValue.role) {
+            case "PATIENT":
+            this.router.navigate(["/patientHomePage"]);
+              break;
+          case "PHARMACY_ADMIN":
+            this.router.navigate(["/pharmacyAdminHomePage"]);
+              break;
+          default:
+            this.router.navigate(["/"]);
+              break;
+      } 
+    } else {
+      this.router.navigate(["/"])
+    }
+}
 }

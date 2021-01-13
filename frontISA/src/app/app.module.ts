@@ -13,6 +13,8 @@ import { SignInComponent } from './components/sign-in/sign-in/sign-in.component'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { PatientHomePageComponent } from './components/patient-home-page/patient-home-page/patient-home-page.component';
+import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home-page/pharmacy-admin-home-page/pharmacy-admin-home-page.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
     NavigationBarComponent,
     SignupComponent,
     ControlMessageComponent,
-    SignInComponent
+    SignInComponent,
+    PatientHomePageComponent,
+    PharmacyAdminHomePageComponent
   ],
   imports: [
     BrowserModule,

@@ -5,10 +5,10 @@
     <li (click) = "checkHome()"><a>Home</a></li>
     <li *ngIf="!signedIn()"><a href="signIn">SignIn</a></li>
     <li *ngIf="!signedIn()"><a href="signUp">SignUp</a></li>
-    <li><a class="nav-item nav-link" (click)="logout()">Logout</a></li>
+  
       
     
 
-    <li *ngIf="signedIn()" (click) ="logOut()"><a href="">LogOut</a></li>
+    <li *ngIf="signedIn()" (click) ="logout()"><a href="">LogOut</a></li>
   </ul>
 </div>

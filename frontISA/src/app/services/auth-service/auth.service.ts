@@ -36,7 +36,7 @@ export class AuthService {
     return this.http.post<any>('http://localhost:8080/api/auth/login', { email, password } )
     .pipe(map(user => {
      
-
+      
         if (user && user.accessToken) { 
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             let token: JWToken  = jwtDecode(user.accessToken)
@@ -45,8 +45,8 @@ export class AuthService {
  
             this.currentUserSubject.next(token);
         }
-
-        return user;
+        let token: JWToken  = jwtDecode(user.accessToken)
+        return token.role;
     }));
   }
 

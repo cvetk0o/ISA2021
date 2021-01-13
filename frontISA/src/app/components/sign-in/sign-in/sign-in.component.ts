@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { first } from 'rxjs/operators';
+import { JWToken } from 'src/app/model/JWToken';
 
 @Component({
   selector: 'app-sign-in',
@@ -39,8 +40,23 @@ export class SignInComponent implements OnInit {
     this.authenticationService.signIn( this.signInForm.value.email , this.signInForm.value.password)
     .pipe( first())
     .subscribe( 
-      data => {
-      this.router.navigate([this.returnUrl]);
+      data=> {
+        
+
+        switch (data) {
+          case "PATIENT":
+            this.router.navigate(["/patientHomePage"]);
+              break;
+          case "PHARMACY_ADMIN":
+            this.router.navigate(["/pharmacyAdminHomePage"]);
+              break;
+          default:
+            this.router.navigate([this.returnUrl]);
+              break;
+      }
+
+
+      
   },
   error => {
       this.error = error;
