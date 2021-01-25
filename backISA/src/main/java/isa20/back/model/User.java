@@ -8,6 +8,7 @@ import java.util.Set;
 
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,7 +57,8 @@ public class User
 	@NotBlank
 	private String phoneNumber;
 	
-	@ManyToMany
+	
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Authority> authorities =new HashSet< Authority>();
 	
 	private Boolean activated;

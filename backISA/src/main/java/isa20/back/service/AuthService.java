@@ -23,10 +23,13 @@ import isa20.back.dto.response.ApiResponse;
 import isa20.back.dto.response.JwtAuthenticationResponse;
 import isa20.back.email.EmailServiceImpl;
 import isa20.back.exception.AppException;
+import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Authority;
+import isa20.back.model.Patient;
 import isa20.back.model.RoleName;
 import isa20.back.model.User;
 import isa20.back.repository.AuthorityRepository;
+import isa20.back.repository.PatientRepository;
 import isa20.back.repository.UserRepository;
 import isa20.back.security.JwtTokenProvider;
 
@@ -53,6 +56,9 @@ public class AuthService
 	@Autowired
 	JwtTokenProvider tokenProvider;
 	
+	@Autowired
+	private PatientRepository patientRepository;
+	
 	
 	public ResponseEntity< ApiResponse > registerUser( SignUpRequest request) throws MessagingException {
 		
@@ -62,15 +68,15 @@ public class AuthService
 			return new ResponseEntity< ApiResponse >( new ApiResponse( false, "Email is already taken"), HttpStatus.BAD_REQUEST);
 		}
 		
-		User user  = new User( request );
+		Patient user  = new Patient( request );
 		
 		user.setPassword( passwordEncoder.encode( request.getPassword1()) );
 		
-		Authority authority = authorityRepository.findByName( RoleName.PATIENT ).orElseThrow( () -> new AppException( "User Role not set." ) );
+		Authority authority = authorityRepository.findByName( RoleName.ROLE_PATIENT).orElseThrow( () -> new AppException( "User Role not set." ) );
 		
 		user.getAuthorities().add( authority );
 		
-		userRepository.save( user );
+		patientRepository.save( user );
 		
 		
 		String text= "<h1>PLEASE CONFIRM YOUR ACCOUNT<h1>";
@@ -88,6 +94,12 @@ public class AuthService
 	
 	public ResponseEntity< ? > logInUser( LogInRequest request ) {
 
+		User user = userRepository.findByEmail( request.getEmail() ).orElseThrow( () -> new ResourceNotFoundException( "User with this email doesn't exist" ) );
+		
+		if( !user.getActivated())
+			throw new AppException( "User must be activated. Check email" );
+		
+		
 		Authentication authentication =
 				authenticationManager.authenticate( new UsernamePasswordAuthenticationToken( request.getEmail(), request.getPassword() ) );
 
@@ -104,12 +116,13 @@ public class AuthService
 	
 	
 	
-	public ResponseEntity< ApiResponse > activateUser( Integer id) {
+	public ResponseEntity< ApiResponse > activateUser( Long id) {
+
+		User user = userRepository.findById( id ).orElseThrow( () -> new ResourceNotFoundException( "User with this id doesn't exist" ) );
 		
+		user.setActivated( true );
 		
-		//User user = userRepository
-		// aktivacija usera i exception handling  https://devwithus.com/exception-handling-for-rest-api-with-spring-boot/
-		
+		userRepository.save( user );
 		
 		return new ResponseEntity< ApiResponse >( new ApiResponse( true, "Account successfully activated"), HttpStatus.OK);
 	}

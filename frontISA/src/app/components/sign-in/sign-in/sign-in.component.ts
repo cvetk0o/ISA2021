@@ -44,10 +44,10 @@ export class SignInComponent implements OnInit {
         
 
         switch (data) {
-          case "PATIENT":
+          case "ROLE_PATIENT":
             this.router.navigate(["/patientHomePage"]);
               break;
-          case "PHARMACY_ADMIN":
+          case "ROLE_PHARMACY_ADMIN":
             this.router.navigate(["/pharmacyAdminHomePage"]);
               break;
           default:

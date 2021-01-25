@@ -21,6 +21,8 @@ import isa20.back.security.*;
 import isa20.back.dto.request.LogInRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
+import isa20.back.exception.AppException;
+import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.User;
 import isa20.back.repository.UserRepository;
 
@@ -69,4 +71,37 @@ public class UserService
 		return ResponseEntity.ok( new JwtAuthenticationResponse( jwt ) );
 			
 	}
+	
+	
+	public ResponseEntity< User > getMyInfo() {
+		
+		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		
+		//UserPrincipal userPrincipal = ( UserPrincipal ) currentUser.getPrincipal();
+		
+	
+		
+		User user = userRepository.findByEmail(currentUser.getName()).orElseThrow( () -> new ResourceNotFoundException( "User not found" ) );
+		
+		return ResponseEntity.ok().body( user );
+		
+	}
+	
+	public Long getMyId() {
+		
+		
+		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		
+		User user = userRepository.findByEmail(currentUser.getName()).orElseThrow( () -> new ResourceNotFoundException( "User not found" ) );
+		
+		
+		return user.getId();
+		
+		
+		
+	}	
+	
+	
+	
+	
 }

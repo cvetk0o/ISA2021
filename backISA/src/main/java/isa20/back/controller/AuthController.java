@@ -42,7 +42,7 @@ public class AuthController
 	
 	
 	@PutMapping("/activate/{id}")
-	public ResponseEntity< ApiResponse > activateUser ( @RequestParam Integer id) {
+	public ResponseEntity< ApiResponse > activateUser ( @RequestParam Long id) {
 		
 		return this.authService.activateUser(id);
 	}
