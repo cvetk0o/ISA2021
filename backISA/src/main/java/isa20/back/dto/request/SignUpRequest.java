@@ -45,6 +45,9 @@ public class SignUpRequest
 	private String street;
 	
 	@NotBlank
+	private String number;
+	
+	@NotBlank
 	private String phoneNumber;
 	
 }

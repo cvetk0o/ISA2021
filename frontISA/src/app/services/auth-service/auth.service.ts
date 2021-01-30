@@ -61,5 +61,8 @@ getUloga(){
   
 }
 
+activateUser(id) {
+ return this.http.post(`${this.restUrl}activate/${id}`, id);
+}
 
 }

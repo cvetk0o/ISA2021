@@ -24,10 +24,12 @@ import isa20.back.dto.response.JwtAuthenticationResponse;
 import isa20.back.email.EmailServiceImpl;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
+import isa20.back.model.Address;
 import isa20.back.model.Authority;
 import isa20.back.model.Patient;
 import isa20.back.model.RoleName;
 import isa20.back.model.User;
+import isa20.back.repository.AddressRepository;
 import isa20.back.repository.AuthorityRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.UserRepository;
@@ -59,6 +61,9 @@ public class AuthService
 	@Autowired
 	private PatientRepository patientRepository;
 	
+	@Autowired
+	private AddressRepository addressRepository;
+	
 	
 	public ResponseEntity< ApiResponse > registerUser( SignUpRequest request) throws MessagingException {
 		
@@ -68,7 +73,11 @@ public class AuthService
 			return new ResponseEntity< ApiResponse >( new ApiResponse( false, "Email is already taken"), HttpStatus.BAD_REQUEST);
 		}
 		
+		Address address = new Address(request.getCountry(), request.getCity() , request.getStreet() , request.getNumber());
+		
 		Patient user  = new Patient( request );
+		
+		user.setAddress( address );
 		
 		user.setPassword( passwordEncoder.encode( request.getPassword1()) );
 		
@@ -76,12 +85,13 @@ public class AuthService
 		
 		user.getAuthorities().add( authority );
 		
-		patientRepository.save( user );
+		addressRepository.save( address );
 		
+		patientRepository.save( user );
 		
 		String text= "<h1>PLEASE CONFIRM YOUR ACCOUNT<h1>";
 		
-		text += "<a href='http://localhost:8080/api/auth/activate/" + user.getId() + "'>Accept</a><br/>";
+		text += "<a href='http://localhost:4200/activationPage/" + user.getId() + "'>Accept</a><br/>";
 		
 		emailService.sendSimpleMessage( user.getEmail(), "ACCOUNT ACTIVATION", text );
 		
@@ -117,7 +127,8 @@ public class AuthService
 	
 	
 	public ResponseEntity< ApiResponse > activateUser( Long id) {
-
+		
+		System.out.println( " STIGAAAAAAAAAAAAAOOOOOOOOOOOOO :::::: " + id    );
 		User user = userRepository.findById( id ).orElseThrow( () -> new ResourceNotFoundException( "User with this id doesn't exist" ) );
 		
 		user.setActivated( true );

@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
 
@@ -45,17 +46,13 @@ public class User
 	@NotBlank
 	private String password;
 	
-	@NotBlank
-	private String country;
-
-	@NotBlank
-	private String city;
-
-	@NotBlank
-	private String street;
+	@ManyToOne
+	private Address address;
 	
 	@NotBlank
 	private String phoneNumber;
+	
+	
 	
 	
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -73,13 +70,17 @@ public class User
 		this.lastname = signUpRequest.getLastname();
 		this.email = signUpRequest.getEmail();
 		this.password = signUpRequest.getPassword1();
-		this.country = signUpRequest.getCountry();
-		this.city = signUpRequest.getCity();
-		this.street = signUpRequest.getStreet();
 		this.phoneNumber = signUpRequest.getPhoneNumber();
 		this.activated = false;
 	
 	
+	}
+	
+	public void Update(SignUpRequest request ) {
+		
+		this.lastname = request.getLastname();
+		this.name = request.getName();
+		this.phoneNumber = request.getPhoneNumber();
 	}
 	
 }

@@ -1,0 +1,41 @@
+<p>
+  search-pharmacy works!
+</p>
+
+
+
+<form [formGroup]="searchForm" (submit) ="search()">
+  <div class="row"> <div class="column">
+
+  <label for="name">Name</label>
+  <input formControlName="name" id="name" />
+
+
+
+  <label for="city">City</label>
+  <input formControlName="city" id="city"  type="city"/>
+  
+</div></div>
+  <button type="submit" >Submit</button>
+</form>
+
+<H3>
+  Rezultati pretrage:
+</H3>
+<div class="row">
+      <ul>
+        <li *ngFor="let pharmacy of pharmacies "> 
+        
+            <div class="column">
+              <div class="card">
+                <h3>Apoteka {{pharmacy.name}}</h3>
+                <p>{{pharmacy.description}}</p>
+                <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
+              </div>
+            </div>
+      
+      
+      </li>
+
+    </ul>
+</div>

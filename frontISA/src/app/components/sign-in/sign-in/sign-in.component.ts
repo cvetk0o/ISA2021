@@ -42,7 +42,7 @@ export class SignInComponent implements OnInit {
     .subscribe( 
       data=> {
         
-
+        alert(data);
         switch (data) {
           case "ROLE_PATIENT":
             this.router.navigate(["/patientHomePage"]);

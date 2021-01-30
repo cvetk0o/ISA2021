@@ -15,6 +15,9 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { PatientHomePageComponent } from './components/patient-home-page/patient-home-page/patient-home-page.component';
 import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home-page/pharmacy-admin-home-page/pharmacy-admin-home-page.component';
+import { SearchPharmacyComponent } from './components/search-pharmacy/search-pharmacy/search-pharmacy.component';
+import { ActivateUserComponent } from './components/activate-user/activate-user/activate-user.component';
+import { UpdateUserInfoComponent } from './components/update-user-info/update-user-info/update-user-info.component';
 
 
 @NgModule({
@@ -26,7 +29,10 @@ import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home
     ControlMessageComponent,
     SignInComponent,
     PatientHomePageComponent,
-    PharmacyAdminHomePageComponent
+    PharmacyAdminHomePageComponent,
+    SearchPharmacyComponent,
+    ActivateUserComponent,
+    UpdateUserInfoComponent
   ],
   imports: [
     BrowserModule,

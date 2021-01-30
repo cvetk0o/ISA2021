@@ -18,7 +18,8 @@ export class SignupComponent implements OnInit {
     phoneNumber: ['', Validators.required],
     city: ['', Validators.required],
     street: ['', Validators.required],
-    country: ['', Validators.required]
+    country: ['', Validators.required],
+    number: ['', Validators.required  ]
   });
 
   constructor(private fb: FormBuilder, private authService: AuthService ) { }

@@ -23,7 +23,9 @@ import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
+import isa20.back.model.Address;
 import isa20.back.model.User;
+import isa20.back.repository.AddressRepository;
 import isa20.back.repository.UserRepository;
 
 @Service
@@ -37,6 +39,9 @@ public class UserService
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	AddressRepository addressRepository;
 	
 	@Autowired
 	JwtTokenProvider tokenProvider;
@@ -73,15 +78,33 @@ public class UserService
 	}
 	
 	
+	public ResponseEntity<?> updateUserInfo(SignUpRequest request) {
+		
+		User user = userRepository.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "User not found" ) );
+		
+		user.Update( request );
+		
+		Address address = addressRepository.findById( user.getAddress().getId() ).orElseThrow( ( ) -> new ResourceNotFoundException( "address not found" ));
+		
+		address.update(request);
+		
+		addressRepository.save( address );
+		
+		userRepository.save( user );
+		
+		return ResponseEntity.ok().body( "Successful update" );
+		
+	}
+	
+	
+	
 	public ResponseEntity< User > getMyInfo() {
 		
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		
-		//UserPrincipal userPrincipal = ( UserPrincipal ) currentUser.getPrincipal();
-		
-	
-		
+
 		User user = userRepository.findByEmail(currentUser.getName()).orElseThrow( () -> new ResourceNotFoundException( "User not found" ) );
+		
+		
 		
 		return ResponseEntity.ok().body( user );
 		

@@ -1,0 +1,44 @@
+<p>
+  update-user-info works!
+</p>
+
+
+<form [formGroup]="updateForm" (submit)="update()">
+  <label for="name">Name</label>
+  <input formControlName="name" id="name" />
+  <app-control-message [control]="updateForm.get('name')"></app-control-message>
+  
+  <label for="name">LastName</label>
+  <input formControlName="lastname" id="lastname" />
+  <app-control-message [control]="updateForm.get('lastname')"></app-control-message>
+  
+
+  <label for="country">Country</label>
+  <input formControlName="country" id="country" />
+  <app-control-message [control]="updateForm.get('country')"></app-control-message>
+
+
+  <label for="email">City</label>
+  <input formControlName="city" id="city" />
+  <app-control-message [control]="updateForm.get('city')"></app-control-message>
+
+  <label for="email">Street</label>
+  <input formControlName="street" id="street" />
+  <app-control-message [control]="updateForm.get('street')"></app-control-message>
+
+  <label for="email">House number</label>
+  <input formControlName="number" id="number" />
+  <app-control-message [control]="updateForm.get('number')"></app-control-message>
+
+
+  <label for="phoneNumber">Phone</label>
+  <input formControlName="phoneNumber" id="phoneNumber" />
+  <app-control-message [control]="updateForm.get('phoneNumber')"></app-control-message>
+
+
+  
+  
+  
+
+  <button type="submit" [disabled]="!updateForm.valid">Submit</button>
+</form>

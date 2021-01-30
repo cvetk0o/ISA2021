@@ -5,7 +5,11 @@ import isa20.back.dto.request.LogInRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.model.User;
+import isa20.back.repository.UserRepository;
 import isa20.back.service.UserService;
+
+
+import java.awt.print.Pageable;
 
 
 import javax.validation.Valid;
@@ -13,6 +17,8 @@ import javax.validation.Valid;
 
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 @RestController
 //@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 @RequestMapping("/api/userController")
@@ -32,6 +40,9 @@ public class UserController
 	@Autowired
 	private UserService UserService;
 
+	@Autowired
+	private UserRepository userRepository;
+	
 	
 	@GetMapping("/test")
 	public ResponseEntity< ? > test () {
@@ -54,10 +65,14 @@ public class UserController
 		
 	}
 	
-	@PutMapping("/user")
-	public void updateUserInfo() {
+	@PostMapping("/user")
+	public ResponseEntity< ? > updateUserInfo(@RequestBody  @Valid final SignUpRequest request) {
 		
+		return UserService.updateUserInfo(request);
 	}
+	
+	
+
 
 	
 	

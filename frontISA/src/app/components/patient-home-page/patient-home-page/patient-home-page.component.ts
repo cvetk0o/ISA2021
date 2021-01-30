@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/model/User';
+import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
   selector: 'app-patient-home-page',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./patient-home-page.component.css']
 })
 export class PatientHomePageComponent implements OnInit {
-
-  constructor() { }
+   myId;
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.userService.getMyInfo().subscribe((data: User) => {
+      console.log(data);
+    })
   }
 
 }

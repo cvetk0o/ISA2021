@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
@@ -26,6 +27,11 @@ public class Pharmacy
 	
 	private String name;
 	
+	private String description;
+	
+	@ManyToOne
+	private Address address;
+	
 	@OneToMany
 	private Set< Pharmacist > pharmacists;
 	
@@ -33,6 +39,8 @@ public class Pharmacy
 	private Set< Dermatologist > dermatologists;
 	
 	
-	
+	public Pharmacy() {
+		
+	}
 	
 }

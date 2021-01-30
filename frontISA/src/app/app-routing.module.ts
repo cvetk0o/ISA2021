@@ -6,15 +6,17 @@ import { SignInComponent } from './components/sign-in/sign-in/sign-in.component'
 import { AuthGuard } from './helpers/auth.guard';
 import { PatientHomePageComponent } from './components/patient-home-page/patient-home-page/patient-home-page.component';
 import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home-page/pharmacy-admin-home-page/pharmacy-admin-home-page.component';
+import { ActivateUserComponent } from './components/activate-user/activate-user/activate-user.component';
 
 
 const routes: Routes = [
   { path: '' , component: WelcomePageComponent } ,
   { path: 'welcomePage' , component: WelcomePageComponent  },
-  { path: 'patientHomePage' , component: PatientHomePageComponent , canActivate: [AuthGuard] , data: { roles: [ 'PATIENT']} },
-  { path: 'pharmacyAdminHomePage' , component: PharmacyAdminHomePageComponent, canActivate: [AuthGuard] , data: { roles: [ 'PHARMACY_ADMIN']} },
+  { path: 'patientHomePage' , component: PatientHomePageComponent , canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PATIENT']} },
+  { path: 'pharmacyAdminHomePage' , component: PharmacyAdminHomePageComponent, canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PHARMACY_ADMIN']} },
   { path: 'signUp' , component: SignupComponent },
   { path : 'signIn' , component: SignInComponent},
+  { path: 'activationPage/:id' , component: ActivateUserComponent},
   { path: '**', redirectTo: '' }
 ];
 
