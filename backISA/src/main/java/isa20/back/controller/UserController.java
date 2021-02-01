@@ -4,12 +4,14 @@ import isa20.back.dto.*;
 import isa20.back.dto.request.LogInRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
+import isa20.back.model.DrugReservation;
 import isa20.back.model.User;
 import isa20.back.repository.UserRepository;
 import isa20.back.service.UserService;
 
 
 import java.awt.print.Pageable;
+import java.util.List;
 
 
 import javax.validation.Valid;
@@ -23,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,7 +75,17 @@ public class UserController
 	}
 	
 	
-
+	@GetMapping("/getMyReservations")
+	public List< DrugReservation > getMyReservations() {
+		
+		return this.UserService.getMyReservations();
+	}
+	
+	@GetMapping("/cancelReservation/{reservationId}")
+	public ResponseEntity< ApiResponse > cancelReservation(@PathVariable long reservationId) {
+		
+		return this.UserService.cancelReservation(reservationId);
+	}
 
 	
 	

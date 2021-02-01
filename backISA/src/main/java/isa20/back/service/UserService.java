@@ -1,5 +1,7 @@
 package isa20.back.service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,8 +26,14 @@ import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Address;
+import isa20.back.model.DrugReservation;
+import isa20.back.model.Item;
+import isa20.back.model.Patient;
 import isa20.back.model.User;
 import isa20.back.repository.AddressRepository;
+import isa20.back.repository.DrugReservationRepository;
+import isa20.back.repository.ItemRepository;
+import isa20.back.repository.PatientRepository;
 import isa20.back.repository.UserRepository;
 
 @Service
@@ -45,6 +53,15 @@ public class UserService
 	
 	@Autowired
 	JwtTokenProvider tokenProvider;
+	
+	@Autowired
+	private DrugReservationRepository drugReservationRepo;
+	
+	@Autowired
+	PatientRepository patientRepo;
+	
+	@Autowired
+	ItemRepository itemRepo;
 	
 	
 	
@@ -110,10 +127,50 @@ public class UserService
 		
 	}
 	
+	
+	public List<DrugReservation> getMyReservations() {
+		
+		Patient patient = patientRepo.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "Patient not found 1" ) );
+		
+		return patient.getDrugReservations();
+		
+	}
+	
+	public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
+	public ResponseEntity< ApiResponse > cancelReservation(Long reservationId) {
+		
+		DrugReservation reservation = drugReservationRepo.findById( reservationId ).orElseThrow( () -> new ResourceNotFoundException( "Reservation with this id not found" ) );
+		
+		Date trenutno = new  Date();
+		
+		boolean moreThanDay = Math.abs(trenutno.getTime() - reservation.getReservedAt().getTime()) > MILLIS_PER_DAY;
+		
+		if( !moreThanDay)
+			throw new  ResourceNotFoundException( "MANJE JE OD 24h ne moze da se otkaze " );
+		
+		Item item = itemRepo.findById( reservation.getItem().getId() ).orElseThrow( ()-> new ResourceNotFoundException( "item with this id doesnt exist" ));
+		
+		item.setQuantity( item.getQuantity() +1 );
+		
+		itemRepo.save( item );
+		
+		Patient patient  = patientRepo.findByDrugReservations( reservation);
+		
+		patient.getDrugReservations().remove( reservation );
+		
+		patientRepo.save( patient );
+		
+		drugReservationRepo.delete( reservation );
+
+		return new ResponseEntity< ApiResponse >( new ApiResponse( true, "successfuly deleted" ) , HttpStatus.OK);
+	}
+	
+	
 	public Long getMyId() {
 		
 		
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		
 		
 		User user = userRepository.findByEmail(currentUser.getName()).orElseThrow( () -> new ResourceNotFoundException( "User not found" ) );
 		

@@ -17,6 +17,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.StringPath;
 
 
+import isa20.back.model.Item;
 import isa20.back.model.Pharmacy;
 import isa20.back.model.QPharmacy;
 
@@ -24,7 +25,7 @@ import isa20.back.model.QPharmacy;
 public interface PharmacyRepository extends JpaRepository< Pharmacy, Long>, QuerydslPredicateExecutor< Pharmacy > , QuerydslBinderCustomizer< QPharmacy > {
 
 	
-		
+		Pharmacy  findByItemList(Item item);
 	
 	 @Override
 	    default public void customize(

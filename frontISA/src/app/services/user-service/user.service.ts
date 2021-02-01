@@ -16,4 +16,12 @@ export class UserService {
   updateMyInfo(info) {
     return this.http.post( `${this.restUrl}user` , info );
   }
+
+  getMyReservations() {
+    return this.http.get(`${this.restUrl}getMyReservations`);
+  }
+
+  cancelReservation(reservationId) {
+    return this.http.get(`${this.restUrl}cancelReservation/${reservationId}`);
+  }
 }

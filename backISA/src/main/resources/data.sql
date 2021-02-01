@@ -6,6 +6,32 @@ INSERT INTO `isa20`.`authority` (`id`, `name`) VALUES ( 5, "ROLE_DERMATOLOGIST")
 INSERT INTO `isa20`.`authority` (`id`, `name`) VALUES ( 6, "ROLE_SYSTEM_ADMIN");
 
 
+INSERT INTO `isa20`.`drug` 
+(`id`, `code` , `name`,`specification`,`type`)
+VALUE
+( 1 , "sifra1" , "bromazepam" , "specifikacija 1" , "antibiotik");
+
+INSERT INTO `isa20`.`drug` 
+(`id`, `code` , `name`,`specification`,`type`)
+VALUE
+( 2 , "sifra2" , "ibuprofen" , "specifikacija 1" , "antibiotik");
+
+INSERT INTO `isa20`.`drug` 
+(`id`, `code` , `name`,`specification`,`type`)
+VALUE
+( 3 , "sifra3" , "karvedilol" , "specifikacija 1" , "antibiotik");
+
+INSERT INTO `isa20`.`drug` 
+(`id`, `code` , `name`,`specification`,`type`)
+VALUE
+( 4 , "sifra4" , "ranitidin" , "specifikacija 1" , "antibiotik");
+
+INSERT INTO `isa20`.`drug` 
+(`id`, `code` , `name`,`specification`,`type`)
+VALUE
+( 5 , "sifra5" , "pavulon" , "specifikacija 1" , "antibiotik");
+
+
 
 INSERT INTO `isa20`.`address`
 (`id`,`city`,`country`,`number`,`street`)
@@ -73,6 +99,23 @@ INSERT INTO `isa20`.`pharmacy`
 values
 (2,"opise neke apoteke 2","milosevic" , 2) ;
 
+
+
+
+
+ INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 1 , 120 , 10 , 1, 2 );
+ 
+  INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 2 , 130 , 9 , 2, 2 );
+  
+   INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 3 , 420 , 8 , 1, 1 );
+   
+    INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 4 , 520 , 7 , 3, 1 );
+    
+     INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 5 , 550 , 6 , 4, 2 );
+     
+     INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 6 , 240 , 5 , 5, 1 );
+     
+     
 
 
 

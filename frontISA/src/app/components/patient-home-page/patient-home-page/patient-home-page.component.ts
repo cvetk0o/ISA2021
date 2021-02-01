@@ -14,6 +14,7 @@ export class PatientHomePageComponent implements OnInit {
   ngOnInit() {
     this.userService.getMyInfo().subscribe((data: User) => {
       console.log(data);
+      
     })
   }
 

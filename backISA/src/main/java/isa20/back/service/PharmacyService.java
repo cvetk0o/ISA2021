@@ -4,6 +4,8 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +38,17 @@ public class PharmacyService
 	
 	public  Iterable< Pharmacy > searchPharm(Predicate predicate ) {
 		
+		
+	//	pharmacyRepo.findAll(PageRequest.of( page, size, Sort.by( "id" ).ascending()  ))
+		
+	//	pharmacyRepo.findAll( Sort.by( properties ). );
+		
 		return this.pharmacyRepo.findAll(predicate);
 	}
+	
+	
+	
+
 	
 	
 }

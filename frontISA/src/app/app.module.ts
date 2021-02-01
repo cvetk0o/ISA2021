@@ -18,6 +18,9 @@ import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home
 import { SearchPharmacyComponent } from './components/search-pharmacy/search-pharmacy/search-pharmacy.component';
 import { ActivateUserComponent } from './components/activate-user/activate-user/activate-user.component';
 import { UpdateUserInfoComponent } from './components/update-user-info/update-user-info/update-user-info.component';
+import { DrugReservationComponent } from './components/drug-reservation/drug-reservation/drug-reservation.component';
+import { ReservationListComponent } from './components/reservation-list/reservation-list/reservation-list.component';
+import { ConsultingReservationComponent } from './components/consulting-reservation/consulting-reservation/consulting-reservation.component';
 
 
 @NgModule({
@@ -32,7 +35,10 @@ import { UpdateUserInfoComponent } from './components/update-user-info/update-us
     PharmacyAdminHomePageComponent,
     SearchPharmacyComponent,
     ActivateUserComponent,
-    UpdateUserInfoComponent
+    UpdateUserInfoComponent,
+    DrugReservationComponent,
+    ReservationListComponent,
+    ConsultingReservationComponent
   ],
   imports: [
     BrowserModule,

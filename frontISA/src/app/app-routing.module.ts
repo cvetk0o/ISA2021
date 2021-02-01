@@ -7,6 +7,8 @@ import { AuthGuard } from './helpers/auth.guard';
 import { PatientHomePageComponent } from './components/patient-home-page/patient-home-page/patient-home-page.component';
 import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home-page/pharmacy-admin-home-page/pharmacy-admin-home-page.component';
 import { ActivateUserComponent } from './components/activate-user/activate-user/activate-user.component';
+import { DrugReservationComponent } from './components/drug-reservation/drug-reservation/drug-reservation.component';
+import { ConsultingReservationComponent } from './components/consulting-reservation/consulting-reservation/consulting-reservation.component';
 
 
 const routes: Routes = [
@@ -17,6 +19,8 @@ const routes: Routes = [
   { path: 'signUp' , component: SignupComponent },
   { path : 'signIn' , component: SignInComponent},
   { path: 'activationPage/:id' , component: ActivateUserComponent},
+  { path: 'drugReservation' , component: DrugReservationComponent},
+  { path: 'consultingReservation' , component: ConsultingReservationComponent},
   { path: '**', redirectTo: '' }
 ];
 

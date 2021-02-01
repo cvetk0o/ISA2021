@@ -1,0 +1,26 @@
+<p>
+  reservation-list works!
+</p>
+
+
+<H3>
+  Moje rezervacije
+</H3>
+<div class="row">
+      <ul>
+        <li *ngFor="let reservation of reservations "> 
+        
+            <div class="column" >
+              <div class="card">
+                <h3> reservisani lek : {{reservation.item.drug.name}}</h3>
+                <p> datum rezervacije: {{reservation.reservedAt}}</p>
+                <p></p>
+                <button (click)="otkazi(reservation.id)">Otkazi rezervaciju</button>
+              </div>
+            </div>
+      
+      
+      </li>
+
+    </ul>
+</div>

@@ -1,5 +1,6 @@
 package isa20.back.model;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -7,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -33,10 +35,15 @@ public class Pharmacy
 	private Address address;
 	
 	@OneToMany
+	@JoinColumn(name = "pharmacy_id")
 	private Set< Pharmacist > pharmacists;
 	
 	@ManyToMany
 	private Set< Dermatologist > dermatologists;
+	
+	@OneToMany
+	 @JoinColumn(name="pharmacy_id")
+	private Set< Item> itemList;
 	
 	
 	public Pharmacy() {
