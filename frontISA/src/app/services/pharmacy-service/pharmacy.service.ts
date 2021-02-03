@@ -18,8 +18,22 @@ export class PharmacyService {
     
     return this.http.get(`${this.restUrl}searchPharm/?${params}` );
 
+  }
 
-    
+
+  getAvailablePharmacies( data) {
+
+    return this.http.post( `${this.restUrl}availablePharmacies` , data);
+  }
+
+  showPharmacists( data) {
+
+    return this.http.post( `${this.restUrl}showPharmacists`,data);
+  }
+
+
+  makeReservation( data) {
+    return this.http.post( `${this.restUrl}makeReservation`,data);
   }
 
 }

@@ -1,9 +1,63 @@
-<p>
-  consulting-reservation works!
-</p>
+<div>
 <h3>Izaberite zeljeni datum savetovanja</h3>
   <input [formControl]="dateControl" type="date"  min="2018-01-01" max="2028-12-31"  (ngModelChange)="valuechangeDate($event)">
 
   <h3>Izaberite vreme pocetka savetovanja</h3>
 <input type="time" id="appt" name="appt" [formControl]="timeControl" (ngModelChange)="valuechange($event)"
        min="09:00" max="18:00" required>
+
+  <button (click)="prvoFiltriranje()">Prvi search</button>
+
+
+</div>
+
+<div  *ngIf="pharmacyDiv">
+  <H3>
+   Pronadjene apoteke
+  </H3>
+  <div class="row">
+        <ul>
+          <li *ngFor="let pharmacy of availablePharmacies "> 
+          
+              <div class="column" >
+                <div class="card">
+                  <h3> Apoteka : {{pharmacy.name}}</h3>
+                  <p>Cena savetovanja : {{pharmacy.consultingPrice}}</p>
+                  <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
+                  <p></p>
+                  <button (click)="showPharmacists(pharmacy.id)">Prikazi farmaceute</button>
+                </div>
+              </div>
+        
+        
+        </li>
+  
+      </ul>
+  </div>
+
+</div>
+
+
+<div *ngIf="pharmacistDiv">
+  <H3>
+    Slobodni farmaceuti
+   </H3>
+   <div class="row">
+         <ul>
+           <li *ngFor="let pharmacist of availablePharmacists "> 
+           
+               <div class="column" >
+                 <div class="card">
+                   <h3> Apotekar : {{pharmacist.name}}  {{pharmacist.lastname}}</h3>
+                   <p>Ocena: </p>
+                   <p></p>
+                   <button (click)="makeReservation(pharmacist.id)">Zakazi pregled</button>
+                 </div>
+               </div>
+         
+         
+         </li>
+   
+       </ul>
+   </div>
+</div>

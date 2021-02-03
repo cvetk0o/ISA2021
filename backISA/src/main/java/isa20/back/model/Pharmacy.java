@@ -31,6 +31,8 @@ public class Pharmacy
 	
 	private String description;
 	
+	private double consultingPrice;
+	
 	@ManyToOne
 	private Address address;
 	
@@ -44,6 +46,7 @@ public class Pharmacy
 	@OneToMany
 	 @JoinColumn(name="pharmacy_id")
 	private Set< Item> itemList;
+	
 	
 	
 	public Pharmacy() {

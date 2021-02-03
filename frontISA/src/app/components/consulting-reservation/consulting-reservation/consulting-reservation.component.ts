@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { Error } from 'src/app/model/Error';
+import { Pharmacy } from 'src/app/model/Pharmacy';
+import { User } from 'src/app/model/User';
+import { PharmacyService } from 'src/app/services/pharmacy-service/pharmacy.service';
 
 @Component({
   selector: 'app-consulting-reservation',
@@ -7,12 +11,17 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./consulting-reservation.component.css']
 })
 export class ConsultingReservationComponent implements OnInit {
-
+  reservation: any = {};
   dateControl = new FormControl(new Date);
   timeControl = new FormControl(new Date);
 
+  availablePharmacies: Pharmacy[];
+  availablePharmacists: User[];
 
-  constructor() { }
+  pharmacyDiv = false;
+  pharmacistDiv = false;
+
+  constructor(private fb: FormBuilder , private pharmacyService: PharmacyService) { }
 
   ngOnInit() {
   }
@@ -23,6 +32,43 @@ export class ConsultingReservationComponent implements OnInit {
 
   valuechange( newValue) {
     console.log(this.timeControl.value);
+  }
+
+  prvoFiltriranje(){
+    if(this.pharmacistDiv == true) 
+      this.pharmacistDiv = false;
+
+    this.reservation.date = this.dateControl.value;
+    this.reservation.time = this.timeControl.value;
+
+    this.pharmacyService.getAvailablePharmacies(this.reservation).subscribe( (data:Pharmacy[]) => {
+      console.log(data);
+      this.availablePharmacies = data;
+      this.pharmacyDiv = true;
+    },
+    (err : Error)=> {
+      alert(err.errors)
+        this.pharmacyDiv = false;
+    }
+    )
+  }
+
+  showPharmacists(pharmacyId) {
+    this.reservation.pharmacyId = pharmacyId;
+    this.pharmacyService.showPharmacists(this.reservation) . subscribe( (data:User[]) => {
+      console.log(data);
+      this.availablePharmacists = data;
+      this.pharmacistDiv=true;
+    })
+  }
+
+
+  makeReservation( pharmacistId) {
+    this.reservation.pharmacistId = pharmacistId;
+    this.pharmacyService.makeReservation(this.reservation).subscribe( data => {
+      console.log(data);
+      
+    })
   }
 
 }

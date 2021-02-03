@@ -1,8 +1,11 @@
 package isa20.back.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +29,20 @@ import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Address;
+import isa20.back.model.Consulting;
 import isa20.back.model.DrugReservation;
 import isa20.back.model.Item;
 import isa20.back.model.Patient;
+import isa20.back.model.Pharmacist;
+import isa20.back.model.Pharmacy;
 import isa20.back.model.User;
 import isa20.back.repository.AddressRepository;
+import isa20.back.repository.ConsultingRepo;
 import isa20.back.repository.DrugReservationRepository;
 import isa20.back.repository.ItemRepository;
 import isa20.back.repository.PatientRepository;
+import isa20.back.repository.PharmacistRepository;
+import isa20.back.repository.PharmacyRepository;
 import isa20.back.repository.UserRepository;
 
 @Service
@@ -62,6 +71,15 @@ public class UserService
 	
 	@Autowired
 	ItemRepository itemRepo;
+	
+	@Autowired
+	PharmacistRepository pharmacistRepo;
+	
+	@Autowired
+	PharmacyRepository pharmacyRepo;
+	
+	@Autowired
+	ConsultingRepo consultingRepo;
 	
 	
 	
@@ -113,6 +131,61 @@ public class UserService
 		
 	}
 	
+	
+	public List<ConsultingDTO> getMyReservedConsultings() {
+		
+		Patient patient = patientRepo.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "Patient not found" ) );
+		
+		if(patient.getConsultings().isEmpty())
+			throw new AppException( "you dont have any reservations" );
+		
+		List<Consulting> consultings = patient.getConsultings().stream().filter( consulting -> consulting.getStatus() ==0 ).collect( Collectors.toList() );
+		
+		List<ConsultingDTO> zaSlanje = new ArrayList< ConsultingDTO >();
+		for(Consulting c : consultings) {
+			
+			Pharmacist pharmacist = pharmacistRepo.findByConsultings( c ).orElseThrow( () -> new ResourceNotFoundException( "not found" ) );
+			
+			Pharmacy pharmacy = pharmacyRepo.findByPharmacists( pharmacist ).orElseThrow( () -> new ResourceNotFoundException( "not found 1" ) );
+			
+			ConsultingDTO cons = new ConsultingDTO( c, pharmacy.getName(), pharmacist );
+			
+			zaSlanje.add( cons );
+		}
+		
+		return zaSlanje;
+		
+	}
+	
+	
+	public ResponseEntity< ? > cancelConsulting( Long consultingId) {
+		
+		Consulting consultig = consultingRepo.findById( consultingId ).orElseThrow( () -> new ResourceNotFoundException( "consulting not found" ) );
+		
+		Patient patient = patientRepo.findByConsultings( consultig ).orElseThrow( ()-> new ResourceNotFoundException( "patient not found" ) );
+		
+		Pharmacist pharmacist = pharmacistRepo.findByConsultings( consultig ).orElseThrow( () -> new ResourceNotFoundException( "Pharmacist not found" ) );
+		
+		//proveri da li je vise od 24 casa ?
+		LocalDateTime trenutno = LocalDateTime.now();
+		
+		if(!trenutno.plusHours( 24 ).isBefore( consultig.getStartTime() ) ) 
+			throw new AppException( "It's less than 24 hours before appointment" );
+			
+		
+		patient.getConsultings().remove( consultig );
+		
+		pharmacist.getConsultings().remove( consultig );
+		
+		patientRepo.save( patient );
+		
+		pharmacistRepo.save( pharmacist );
+		
+		consultingRepo.delete( consultig );
+		
+		return new ResponseEntity< ApiResponse >( new ApiResponse( true,"Consulting cancelled" ), HttpStatus.OK);
+		
+	}
 	
 	
 	public ResponseEntity< User > getMyInfo() {
@@ -180,6 +253,8 @@ public class UserService
 		
 		
 	}	
+	
+	
 	
 	
 	

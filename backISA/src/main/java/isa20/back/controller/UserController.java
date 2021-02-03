@@ -4,6 +4,8 @@ import isa20.back.dto.*;
 import isa20.back.dto.request.LogInRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
+import isa20.back.dto.response.ConsultingDTO;
+import isa20.back.model.Consulting;
 import isa20.back.model.DrugReservation;
 import isa20.back.model.User;
 import isa20.back.repository.UserRepository;
@@ -88,5 +90,19 @@ public class UserController
 	}
 
 	
+	@GetMapping("/reservedConsultings")
+	public List< ConsultingDTO > getMyConsultings() {
+		
+		return this.UserService.getMyReservedConsultings();
+	}
+	
+	
+	@GetMapping("/cancelConsulting/{consultingId}") 
+	public ResponseEntity< ? > cancelConsulting(@PathVariable long consultingId) {
+		
+		
+		return this.UserService.cancelConsulting(consultingId);
+		
+	}
 	
 }

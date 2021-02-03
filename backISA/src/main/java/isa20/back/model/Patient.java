@@ -24,6 +24,10 @@ public class Patient extends User
 	@JoinColumn(name= "patientId")
 	private List< DrugReservation > drugReservations;
 	
+	@OneToMany
+	@JoinColumn(name="patientId")
+	private List<Consulting> consultings;
+	
 	@ManyToMany
 	private List< Drug > alergies;
 	

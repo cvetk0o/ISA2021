@@ -24,4 +24,12 @@ export class UserService {
   cancelReservation(reservationId) {
     return this.http.get(`${this.restUrl}cancelReservation/${reservationId}`);
   }
+
+  getMyReservedConsultings() {
+    return this.http.get(`${this.restUrl}reservedConsultings`);
+  }
+
+  cancelConsulting(consultingid) {
+    return this.http.get(`${this.restUrl}cancelConsulting/${consultingid}`);
+  }
 }

@@ -60,6 +60,28 @@ VALUES
 (5, "valjevo" , "srbija" , "5" ,"marksova");
 
 
+
+
+
+
+INSERT INTO `isa20`.`pharmacy`
+(`id`,`consulting_price`,`description`,`name`,`address_id`)
+values
+(1,200,"opise neke apoteke","jankovic" , 1) ;
+
+
+INSERT INTO `isa20`.`pharmacy`
+(`id`,`consulting_price`,`description`,`name`,`address_id`)
+values
+(2,320,"opise neke apoteke 2","milosevic" , 2) ;
+
+
+
+
+
+
+
+
 -- INSERT INTO `isa20`.`user` ( )
 
 INSERT INTO `isa20`.`user`
@@ -73,31 +95,15 @@ VALUES
 ("Patient",2,1,"petar.ponjevic6@gmail.com", "milosevic" ,"metar","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",3);
 
 INSERT INTO `isa20`.`user`
-( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`, `address_id`)
+( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number` ,`working_hours_from`,`working_hours_to`, `address_id` ,`pharmacy_id`)
 VALUES
-("Patient",3,0, "petar.ponjevic5@gmail.com", "jankovic" ,"dzoni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",4);
+("Pharmacist",3,0, "petar.ponjevic5@gmail.com", "jankovic" ,"dzoni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345","08:00","16:00",4 ,1);
 
 INSERT INTO `isa20`.`user`
-( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`, `address_id`)
+( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`,`working_hours_from`,`working_hours_to`, `address_id`,`pharmacy_id`)
 VALUES
-("Patient",4,0, "petar.ponjevic4@gmail.com", "jankovic" ,"poni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",5);
+("Pharmacist",4,0, "petar.ponjevic4@gmail.com", "jankovic" ,"poni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345","12:00","20:00",5 ,2);
 
-
-
-
-
-
-
-INSERT INTO `isa20`.`pharmacy`
-(`id`,`description`,`name`,`address_id`)
-values
-(1,"opise neke apoteke","jankovic" , 1) ;
-
-
-INSERT INTO `isa20`.`pharmacy`
-(`id`,`description`,`name`,`address_id`)
-values
-(2,"opise neke apoteke 2","milosevic" , 2) ;
 
 
 
@@ -116,8 +122,19 @@ values
      INSERT INTO `isa20`.`item`(`id`,`price`,`quantity`, `drug_id` , `pharmacy_id`) VALUES ( 6 , 240 , 5 , 5, 1 );
      
      
+insert into `isa20`.`vacation`(`id`,`vacation_from`,`vacation_to`,`pharmacist_id`) values ( 1 , "2021-01-30" ,"2021-03-30" , 4 );
 
 
 
+
+
+
+
+
+INSERT INTO `isa20`.`consulting`(`id`,`end_time`,`start_time`,`status`,`pharmacist_id` ) values (1,"2021-06-15 15:30" , "2021-06-15 15:00" ,0, 3 );
+
+
+
+--INSERT INTO `isa20`.`consulting_reservation`(`id`,`consulting_id`,`patient_id`) values ( 1 , 1 , 2);
 
 

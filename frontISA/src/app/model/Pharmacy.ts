@@ -5,4 +5,5 @@ export interface Pharmacy {
     name: string;
     description: string;
     address: Address;
+    consultingPrice: number;
 }
