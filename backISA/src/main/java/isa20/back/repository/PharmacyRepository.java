@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.MultiValueBinding;
@@ -31,7 +32,9 @@ public interface PharmacyRepository extends JpaRepository< Pharmacy, Long>, Quer
 		List<Pharmacy> findAllByPharmacistsIn(List<Pharmacist> lista);
 		
 		Optional< Pharmacy > findByPharmacists(Pharmacist pharm);
-	
+		
+		List<Pharmacy> findAllByIdIn(List< Long > ids , Sort s);
+ 	
 	 @Override
 	    default public void customize(
 	      QuerydslBindings bindings, QPharmacy root) {

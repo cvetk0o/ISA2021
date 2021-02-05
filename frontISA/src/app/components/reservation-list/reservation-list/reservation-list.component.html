@@ -29,7 +29,7 @@
 
 
 <H3>
-  Zakazani pregledi
+  Zakazana savetovanja
 </H3>
 <div class="row">
       <ul>
@@ -42,9 +42,36 @@
                 <p> apoteka : {{consulting.pharmacy}}</p>
                 <p> pocetak: {{consulting.startTime  | date:'shortTime'}}</p>
                 <p> kraj: {{consulting.endTime | date:'shortTime'}}</p>
-                <p> datum: {{consulting.date}}</p>
+                <p> datum: {{consulting.date | date}}</p>
                 <p></p>
                 <button (click)="cancelConsulting(consulting.id)">Otkazi savetovanje</button>
+              </div>
+            </div>
+      
+      
+      </li>
+
+    </ul>
+</div>
+
+
+
+<H3>
+  Reserved examinations
+</H3>
+<div class="row">
+      <ul>
+        <li *ngFor="let examination of reservedExaminations "> 
+        
+            <div class="column" >
+              <div class="card">
+                <h3> ID examination : {{examination.id}}</h3>
+                <p>  Dermatologist : {{examination.dermatologist.name}}</p>
+                <p> pocetak: {{examination.startTime  | date:'shortTime'}}</p>
+                <p> kraj: {{examination.endTime | date:'shortTime'}}</p>
+                <p> datum: {{examination.startTime| date}}</p>
+                <p></p>
+                <button (click)="cancelExamination(examination.id)">Cancel examination</button>
               </div>
             </div>
       

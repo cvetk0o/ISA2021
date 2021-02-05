@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiResponse } from 'src/app/model/ApiResponse';
 import { Consulting } from 'src/app/model/Consulting';
 import { DrugReservation } from 'src/app/model/DrugReservation';
+import { Error } from 'src/app/model/Error';
+import { Examination } from 'src/app/model/Examination';
 import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
@@ -11,6 +14,8 @@ import { UserService } from 'src/app/services/user-service/user.service';
 export class ReservationListComponent implements OnInit {
   reservations: DrugReservation[];
   reservedConsultings: Consulting[];
+  reservedExaminations: Examination[];
+
   constructor(private userService: UserService) { }
 
   ngOnInit() {
@@ -21,24 +26,39 @@ export class ReservationListComponent implements OnInit {
     this.userService.getMyReservedConsultings(). subscribe((data:Consulting[]) =>{
       this.reservedConsultings = data;
     })
+
+    this.userService.getMyReservedExaminations().subscribe((data:Examination[]) => {
+      this.reservedExaminations=data;
+    } ,(error: Error) => {
+      alert(error.errors);
+    })
   }
 
 
   otkazi(reservationId) {
     console.log(reservationId);
 
-    this.userService.cancelReservation(reservationId).subscribe(data => {
-      console.log(data);
+    this.userService.cancelReservation(reservationId).subscribe((data:ApiResponse) => {
+      alert(data.message);
     })
   }
 
   cancelConsulting(consultingid) {
     console.log(consultingid);
 
-    this.userService.cancelConsulting(consultingid).subscribe( data => {
-      console.log(data);
+    this.userService.cancelConsulting(consultingid).subscribe( (data:ApiResponse) => {
+      alert(data.message);
     })
     
+  }
+
+  cancelExamination(examinationId) {
+    this.userService.cancelExamination(examinationId) . subscribe((data:ApiResponse) => {
+      alert(data.message);
+
+    },(error:Error) =>{
+      alert(error.errors)
+    })
   }
 
 }

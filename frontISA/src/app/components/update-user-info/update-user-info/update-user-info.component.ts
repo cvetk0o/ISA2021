@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ApiResponse } from 'src/app/model/ApiResponse';
+import { Error } from 'src/app/model/Error';
 import { User } from 'src/app/model/User';
 import { UserService } from 'src/app/services/user-service/user.service';
 
@@ -20,7 +23,12 @@ export class UpdateUserInfoComponent implements OnInit {
     country: ['', Validators.required],
     number: ['' , Validators.required]
   });
-  constructor( private fb: FormBuilder , private userService: UserService) { }
+
+  passwordForm = this.fb.group({
+    password1: ['',Validators.required],
+    password2: ['', Validators.required]
+  })
+  constructor( private fb: FormBuilder , private userService: UserService ,private router: Router) { }
 
   ngOnInit() {
     this.userService.getMyInfo().subscribe( (data:User) => {
@@ -49,5 +57,25 @@ export class UpdateUserInfoComponent implements OnInit {
       })
   }
 
+  updatePassword() {
+
+    if (this.passwordForm.controls['password1'].value === this.passwordForm.controls['password2'].value) {
+      console.log('isti su');
+
+        this.userService.updatePassword(this.passwordForm.value).subscribe( (data:ApiResponse) => {
+          alert("uspesno :"+data.message)
+          //this.router.navigate(["/welcomePage"]);
+          
+        } ,
+        (error: Error)=>{
+          console.log(error);
+          alert("greska : "+error.errors);
+        });
+
+    } else {
+      alert("passwords don't match")
+    }
+
+  }
 
 }

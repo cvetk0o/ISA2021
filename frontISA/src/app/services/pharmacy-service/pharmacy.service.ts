@@ -36,4 +36,21 @@ export class PharmacyService {
     return this.http.post( `${this.restUrl}makeReservation`,data);
   }
 
+  sortPharmacies( propertie , order ) {
+
+    return this.http.get(`${this.restUrl}sort/${propertie}/${order}`)
+  }
+
+  getAvailableExaminations(pharmacyId){
+
+    return this.http.get(`${this.restUrl}examinations/${pharmacyId}`);
+  }
+
+
+  sortAvailablePharmacies(propertie , order , reservation) {
+
+    return this.http.post(`${this.restUrl}availablePharmacies/sort/${propertie}/${order}` , reservation)
+
+  }
+
 }

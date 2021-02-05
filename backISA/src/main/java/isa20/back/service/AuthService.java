@@ -128,7 +128,6 @@ public class AuthService
 	
 	public ResponseEntity< ApiResponse > activateUser( Long id) {
 		
-		System.out.println( " STIGAAAAAAAAAAAAAOOOOOOOOOOOOO :::::: " + id    );
 		User user = userRepository.findById( id ).orElseThrow( () -> new ResourceNotFoundException( "User with this id doesn't exist" ) );
 		
 		user.setActivated( true );

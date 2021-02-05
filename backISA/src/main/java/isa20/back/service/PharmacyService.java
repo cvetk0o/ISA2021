@@ -3,6 +3,7 @@ package isa20.back.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.comparator.Comparators;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -25,11 +27,15 @@ import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Consulting;
 import isa20.back.model.ConsultingReservation;
+import isa20.back.model.Dermatologist;
+import isa20.back.model.Examination;
 import isa20.back.model.Patient;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
 import isa20.back.repository.ConsultingRepo;
 import isa20.back.repository.ConsultingReservationRepository;
+import isa20.back.repository.DermatologistRepository;
+import isa20.back.repository.ExaminationRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.PharmacistRepository;
 import isa20.back.repository.PharmacyRepository;
@@ -57,6 +63,11 @@ public class PharmacyService
 	@Autowired
 	PatientRepository patientRepo;
 	
+	@Autowired
+	DermatologistRepository dermatologistRepo;
+	
+	@Autowired
+	ExaminationRepository examinationRepo;
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {
 		
@@ -80,6 +91,20 @@ public class PharmacyService
 		return this.pharmacyRepo.findAll(predicate);
 	}
 	
+	
+	public List<Pharmacy> sortPharmacies(String propertie , String order ) {
+		
+		List<Pharmacy> sorted;
+		
+		
+		
+		if(order.equals( "asceding" )) 
+			sorted = pharmacyRepo.findAll(Sort.by( propertie ).ascending());
+		else
+			sorted = pharmacyRepo.findAll( Sort.by( propertie ).descending() );
+		
+		return sorted;
+	}
 	
 	
 	
@@ -283,5 +308,40 @@ public class PharmacyService
 		
 	}
 	
+	
+	public List<Examination> getAvailableExaminations(Long pharmacyId) {
+		
+		Pharmacy pharmacy = pharmacyRepo.findById(pharmacyId).orElseThrow( () -> new ResourceNotFoundException( "Pharmacy with this id doesn't exist" ) );
+		
+		System.out.println( "pronasao apoteku  : "  + pharmacy.getName());
+		
+		for (Dermatologist derm : pharmacy.getDermatologists())
+			System.out.println( "ime: " + derm.getName() );
+		
+		List<Examination > examinations = examinationRepo.findByStatusEqualsAndDermatologistIn( 0, pharmacy.getDermatologists() );
+		
+		for(Examination exam : examinations)
+			System.out.println( "exam id : " + exam.getId() );
+		
+		return examinations;
+	}
+	
+	
+	public List<Pharmacy> getSortedAvailablePharmacies(String propertie ,String order , ConsultingReservationRequest request) {
+		
+		List<Pharmacy> pharmacies = getAvailablePharmacies( request );
+			
+		List<Long> ids = pharmacies.stream().map( Pharmacy::getId ).collect( Collectors.toList() );
+		
+		if(order.equals( "ascending" )) {
+			System.out.println( "ascENDINGGG" );
+			pharmacies = pharmacyRepo.findAllByIdIn( ids , Sort.by( propertie ).ascending() );
+		}	else {
+			System.out.println( "descendinggggggggggggggggg" );
+			pharmacies = pharmacyRepo.findAllByIdIn( ids , Sort.by( propertie ).descending() );
+		}
+		
+		return pharmacies;
+	}
 	
 }

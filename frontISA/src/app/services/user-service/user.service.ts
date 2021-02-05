@@ -32,4 +32,25 @@ export class UserService {
   cancelConsulting(consultingid) {
     return this.http.get(`${this.restUrl}cancelConsulting/${consultingid}`);
   }
+
+  updatePassword(info) {
+    return this.http.post( `${this.restUrl}updatePassword` , info );
+  }
+
+
+  makeReservation(examinationId) {
+    return this.http.get(`${this.restUrl}examinations/reservation/${examinationId}`); 
+  }
+
+  getMyReservedExaminations(){
+    return this.http.get(`${this.restUrl}reservedExaminations`);
+  }
+
+  cancelExamination(examinationId){
+
+    return this.http.get(`${this.restUrl}cancelExamination/${examinationId}`);
+  }
+
 }
+
+

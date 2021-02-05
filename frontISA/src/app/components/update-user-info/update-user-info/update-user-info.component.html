@@ -1,7 +1,8 @@
 <p>
   update-user-info works!
 </p>
-
+<div class="row">
+  <div class="column">
 
 <form [formGroup]="updateForm" (submit)="update()">
   <label for="name">Name</label>
@@ -42,3 +43,22 @@
 
   <button type="submit" [disabled]="!updateForm.valid">Submit</button>
 </form>
+
+</div>
+<div class="column">
+
+  ZA SIFRU
+<form [formGroup]="passwordForm" (submit)="updatePassword()">
+  <label for="Password">Password</label>
+  <input formControlName="password1" id="password1"  type="password"/>
+  <app-control-message [control]="passwordForm.get('password1')"></app-control-message>
+
+  <label for="Password">Password2</label>
+  <input formControlName="password2" id="password2"  type="password"/>
+  <app-control-message [control]="passwordForm.get('password2')"></app-control-message>
+
+  <button type="submit" [disabled]="!passwordForm.valid">Submit</button>
+</form>
+</div>
+
+</div>

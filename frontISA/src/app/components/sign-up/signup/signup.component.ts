@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ApiResponse } from 'src/app/model/ApiResponse';
+import { Error } from 'src/app/model/Error';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 
 @Component({
@@ -22,7 +25,7 @@ export class SignupComponent implements OnInit {
     number: ['', Validators.required  ]
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService ) { }
+  constructor(private fb: FormBuilder, private authService: AuthService ,private router: Router) { }
 
   ngOnInit() {
   }
@@ -35,12 +38,17 @@ export class SignupComponent implements OnInit {
     if (this.signUpForm.controls['password1'].value === this.signUpForm.controls['password2'].value) {
       console.log('isti su');
 
-        this.authService.signUp(this.signUpForm.value).subscribe( data => {
-          console.log(data);
+        this.authService.signUp(this.signUpForm.value).subscribe( (data:ApiResponse) => {
+          alert(data.message)
+          this.router.navigate(["/welcomePage"]);
+          
+        } ,
+        (error: Error)=>{
+          alert(error.errors);
         });
 
     } else {
-      console.log('nisu');
+      alert("passwords don't match")
     }
 
   }

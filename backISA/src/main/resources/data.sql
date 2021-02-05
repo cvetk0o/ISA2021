@@ -92,7 +92,7 @@ VALUES
 INSERT INTO `isa20`.`user`
 ( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`, `address_id`)
 VALUES
-("Patient",2,1,"petar.ponjevic6@gmail.com", "milosevic" ,"metar","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",3);
+("Dermatologist",2,1,"petar.ponjevic6@gmail.com", "milosevic" ,"metar","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",3);
 
 INSERT INTO `isa20`.`user`
 ( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number` ,`working_hours_from`,`working_hours_to`, `address_id` ,`pharmacy_id`)
@@ -106,6 +106,7 @@ VALUES
 
 
 
+INSERT INTO `isa20`.`pharmacy_dermatologists`(`pharmacy_id`,`dermatologists_id`) VALUES ( 1, 2);
 
 
 
@@ -128,13 +129,21 @@ insert into `isa20`.`vacation`(`id`,`vacation_from`,`vacation_to`,`pharmacist_id
 
 
 
-
-
-
 INSERT INTO `isa20`.`consulting`(`id`,`end_time`,`start_time`,`status`,`pharmacist_id` ) values (1,"2021-06-15 15:30" , "2021-06-15 15:00" ,0, 3 );
 
 
 
 --INSERT INTO `isa20`.`consulting_reservation`(`id`,`consulting_id`,`patient_id`) values ( 1 , 1 , 2);
+
+
+INSERT INTO `isa20`.`examination`(`id`,`end_time`,`price`,`start_time`,`status`,`dermatologist_id` , `patient_id`) values( 1 , "2021-06-15 15:30" , 500 , "2021-06-15 15:00" , 0 ,2  ,null);
+
+INSERT INTO `isa20`.`examination`(`id`,`end_time`,`price`,`start_time`,`status`,`dermatologist_id` , `patient_id`) values( 2 , "2021-03-15 10:30" , 600 , "2021-06-15 09:45" , 0 ,2  ,null);
+
+
+INSERT INTO `isa20`.`examination`(`id`,`end_time`,`price`,`start_time`,`status`,`dermatologist_id` , `patient_id`) values( 3 , "2021-05-15 15:30" , 700 , "2021-06-15 15:00" , 0 ,2  ,null);
+
+
+INSERT INTO `isa20`.`examination`(`id`,`end_time`,`price`,`start_time`,`status`,`dermatologist_id` , `patient_id`) values( 4 , "2021-08-15 15:30" , 400 , "2021-06-15 15:00" , 0 ,2  ,null);
 
 

@@ -28,6 +28,10 @@ public class Pharmacist extends User
 	@OneToMany
 	@JoinColumn(name= "pharmacistId")
 	private List< Consulting > consultings;
+	
+	@OneToMany
+	@JoinColumn(name="pharmacistId")
+	private List< Rating > ratings;
 
 	private String workingHoursFrom;
 	

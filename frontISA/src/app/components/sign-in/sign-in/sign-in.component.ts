@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { first } from 'rxjs/operators';
 import { JWToken } from 'src/app/model/JWToken';
+import { Error } from 'src/app/model/Error';
 
 @Component({
   selector: 'app-sign-in',
@@ -58,8 +59,8 @@ export class SignInComponent implements OnInit {
 
       
   },
-  error => {
-      this.error = error;
+  (error:Error) => {
+      alert(error.errors);
       
   }
 

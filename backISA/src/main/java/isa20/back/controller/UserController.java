@@ -7,6 +7,7 @@ import isa20.back.dto.response.ApiResponse;
 import isa20.back.dto.response.ConsultingDTO;
 import isa20.back.model.Consulting;
 import isa20.back.model.DrugReservation;
+import isa20.back.model.Examination;
 import isa20.back.model.User;
 import isa20.back.repository.UserRepository;
 import isa20.back.service.UserService;
@@ -104,5 +105,35 @@ public class UserController
 		return this.UserService.cancelConsulting(consultingId);
 		
 	}
+	
+	@PostMapping("/updatePassword")
+	public ResponseEntity< ? > updatePassword(@RequestBody  @Valid final SignUpRequest request) {
+		
+		System.out.println( "POGODIO API" );
+		
+		return this.UserService.updatePassword(request);	
+		
+	}
+	
+	
+	@GetMapping("/examinations/reservation/{examinationId}")
+	public ResponseEntity< ? > makeExaminationReservation( @PathVariable Long examinationId) {
+		
+		return this.UserService.makeExamReservation(examinationId);
+	}
+
+	@GetMapping("/reservedExaminations")
+	public List<Examination> getMyReservedExaminations() {
+		
+		return this.UserService.getMyReservedExaminations();
+	}
+	
+	@GetMapping("/cancelExamination/{examinationId}")
+	public ResponseEntity< ApiResponse > cancelExamination(@PathVariable Long examinationId) {
+		
+		return this.UserService.cancelExamination( examinationId );
+				
+	}
+	
 	
 }

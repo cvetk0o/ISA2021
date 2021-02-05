@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +31,7 @@ import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Consulting;
 import isa20.back.model.ConsultingReservation;
+import isa20.back.model.Examination;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
 import isa20.back.repository.ConsultingRepo;
@@ -83,6 +85,12 @@ public class PharmacyController
 		
 	}
 	
+	@GetMapping("/sort/{propertie}/{order}")
+	public List<Pharmacy> sortPharmacie(@PathVariable String propertie , @PathVariable String order) {
+		
+		return this.pharmacyService.sortPharmacies( propertie, order );
+	}
+	
 	
 	@PostMapping("/showPharmacists")
 	public List< Pharmacist > getAvailablePharmacists( @RequestBody ConsultingReservationRequest request) {
@@ -90,10 +98,30 @@ public class PharmacyController
 		return this.pharmacyService.getAvailablePharmacists(request) ;
 	}
 	
+	
+	@PostMapping("/availablePharmacies/sort/{propertie}/{order}")
+	public List<Pharmacy> getSortedAvailablePharmacies(@PathVariable String propertie , @PathVariable String order , @RequestBody ConsultingReservationRequest request) {
+		
+		return this.pharmacyService.getSortedAvailablePharmacies(propertie , order, request);
+		
+	}
+	
+	
 	@PostMapping("/makeReservation")
 	public ResponseEntity< ApiResponse > makeReservation(@RequestBody ConsultingReservationRequest request) {
 		
 		return this.pharmacyService.makeReservation(request);
 	}
 
+	
+	@GetMapping("/examinations/{pharmacyId}")
+	public List<Examination> availableExaminations( @PathVariable Long pharmacyId) {
+		
+		return this.pharmacyService.getAvailableExaminations(pharmacyId);
+	}
+	
+	
+	
+	
+	
 }

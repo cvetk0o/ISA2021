@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Error } from 'src/app/model/Error';
 import { Pharmacy } from 'src/app/model/Pharmacy';
 import { User } from 'src/app/model/User';
@@ -21,6 +21,12 @@ export class ConsultingReservationComponent implements OnInit {
   pharmacyDiv = false;
   pharmacistDiv = false;
 
+
+  sortForm = this.fb.group({
+    propertie: ['',Validators.required],
+    order: ['' ,Validators.required]
+  });
+  
   constructor(private fb: FormBuilder , private pharmacyService: PharmacyService) { }
 
   ngOnInit() {
@@ -69,6 +75,21 @@ export class ConsultingReservationComponent implements OnInit {
       console.log(data);
       
     })
+  }
+
+
+  sortPharmacies(){
+
+    console.log(this.sortForm.value);
+    this.pharmacyService.sortAvailablePharmacies(this.sortForm.controls["propertie"].value , this.sortForm.controls["order"].value  , this.reservation)
+    .subscribe( (data:Pharmacy[]) => {
+      console.log(data);
+      this.availablePharmacies = data; 
+    }, 
+    (error:Error) => {
+      alert(error.message);
+    })
+    
   }
 
 }

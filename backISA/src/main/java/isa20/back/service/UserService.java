@@ -31,6 +31,7 @@ import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Address;
 import isa20.back.model.Consulting;
 import isa20.back.model.DrugReservation;
+import isa20.back.model.Examination;
 import isa20.back.model.Item;
 import isa20.back.model.Patient;
 import isa20.back.model.Pharmacist;
@@ -39,6 +40,7 @@ import isa20.back.model.User;
 import isa20.back.repository.AddressRepository;
 import isa20.back.repository.ConsultingRepo;
 import isa20.back.repository.DrugReservationRepository;
+import isa20.back.repository.ExaminationRepository;
 import isa20.back.repository.ItemRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.PharmacistRepository;
@@ -80,6 +82,10 @@ public class UserService
 	
 	@Autowired
 	ConsultingRepo consultingRepo;
+	
+	@Autowired 
+	ExaminationRepository examRepo;
+	
 	
 	
 	
@@ -255,8 +261,65 @@ public class UserService
 	}	
 	
 	
+	public ResponseEntity< ApiResponse >  updatePassword( SignUpRequest request) {
+		
+		System.out.println( "pogodio service" );
+		
+		User user = userRepository.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "User with this id doesnt exist" ) );
+		
+		if(passwordEncoder.encode( request.getPassword1() ).equals( user.getPassword() ))
+			throw new AppException( "You entered previous password.Please enter new " );
+		
+		user.setPassword( passwordEncoder.encode( request.getPassword1() ) );
+		
+		userRepository.save( user );
+		
+		return new ResponseEntity< ApiResponse >( new ApiResponse( true, "password successfuly updated" ) , HttpStatus.OK);
+	}
 	
 	
+	
+	
+	public ResponseEntity< ApiResponse > makeExamReservation(Long examinationId) {
+		
+		
+			Examination exam = examRepo.findById( examinationId ).orElseThrow( () -> new ResourceNotFoundException( "Exam with this id doesn't exist" ));
+			
+			Patient patient = patientRepo.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "User with this id doesn't exist" ) );
+			
+			exam.setPatient( patient );
+			
+			exam.setStatus( 1 );
+			
+			examRepo.save( exam );
+			
+			patientRepo.save(patient);
+			
+			return new ResponseEntity< ApiResponse >( new ApiResponse( true, "Reservation successfully created" ) ,  HttpStatus.OK);
+		
+	}
+	
+	public List<Examination> getMyReservedExaminations() {
+		
+		List<Examination> examinations = examRepo.findByPatientId(getMyId());
+				
+		return examinations;
+	}
+	
+	
+	public ResponseEntity< ApiResponse > cancelExamination(Long examinationId) {
+		
+		Examination exam = examRepo.findById( examinationId ).orElseThrow( () -> new ResourceNotFoundException( "Examination with this id not found" ) );
+		
+		exam.setPatient( null );
+		
+		exam.setStatus( 0 );
+		
+		examRepo.save( exam );
+		
+		return new ResponseEntity< ApiResponse >( new ApiResponse( true, "Examination successfuly canceled" ), HttpStatus.OK);
+		
+	}
 	
 	
 }

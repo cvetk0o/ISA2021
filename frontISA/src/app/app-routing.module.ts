@@ -9,6 +9,8 @@ import { PharmacyAdminHomePageComponent } from './components/pharmacy-admin-home
 import { ActivateUserComponent } from './components/activate-user/activate-user/activate-user.component';
 import { DrugReservationComponent } from './components/drug-reservation/drug-reservation/drug-reservation.component';
 import { ConsultingReservationComponent } from './components/consulting-reservation/consulting-reservation/consulting-reservation.component';
+import { PharmacyListComponent } from './components/pharmacy-list/pharmacy-list/pharmacy-list.component';
+import { PharmacyProfileComponent } from './components/pharmacy-profile/pharmacy-profile/pharmacy-profile.component';
 
 
 const routes: Routes = [
@@ -21,6 +23,8 @@ const routes: Routes = [
   { path: 'activationPage/:id' , component: ActivateUserComponent},
   { path: 'drugReservation' , component: DrugReservationComponent},
   { path: 'consultingReservation' , component: ConsultingReservationComponent},
+  { path: 'pharmacyList' , component: PharmacyListComponent},
+  { path: 'pharmacyProfile/:id' ,component: PharmacyProfileComponent},
   { path: '**', redirectTo: '' }
 ];
 

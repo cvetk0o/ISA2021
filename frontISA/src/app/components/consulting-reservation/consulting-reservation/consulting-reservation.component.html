@@ -15,6 +15,22 @@
   <H3>
    Pronadjene apoteke
   </H3>
+  <div>
+    
+      <label>Sort by:</label>
+      <form [formGroup]="sortForm" (submit) = "sortPharmacies()">
+        <select formControlName="propertie">
+          <option value="consultingPrice">Price</option>
+          <option value="rating">Rating</option>
+        </select>
+
+        <select formControlName="order">
+          <option value="ascending">Asceding</option>
+          <option value="desceding">Desceding</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+  </div>
   <div class="row">
         <ul>
           <li *ngFor="let pharmacy of availablePharmacies "> 

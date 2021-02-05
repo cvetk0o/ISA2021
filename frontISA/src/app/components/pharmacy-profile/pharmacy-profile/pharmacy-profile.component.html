@@ -1,0 +1,25 @@
+
+
+<h3> Available predefined examinations </h3>
+
+
+
+<ul>
+  
+  <li *ngFor="let examination of examinations "> 
+    <div class="column">
+      
+        <div class="card">
+          <h3>Dermatologist: {{examination.dermatologist.name}} {{examination.dermatologist.lastname}}</h3>
+          <p>date: {{examination.startTime | date}}</p>
+          <p> start: {{examination.startTime | date:'shortTime' }}</p>
+          <p> end: {{examination.endTime | date:'shortTime' }}</p>
+          <p>price: {{examination.price}}</p>
+          <button (click)="makeReservation(examination.id)" > Make reservation</button>
+        </div>
+      
+      </div>
+</li>
+
+</ul>
+

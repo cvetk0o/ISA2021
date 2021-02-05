@@ -31,7 +31,7 @@ public class Pharmacy
 	
 	private String description;
 	
-	private double consultingPrice;
+	private long consultingPrice;
 	
 	@ManyToOne
 	private Address address;
