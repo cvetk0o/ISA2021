@@ -2,12 +2,16 @@ package isa20.back.controller;
 
 import isa20.back.dto.*;
 import isa20.back.dto.request.LogInRequest;
+import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.dto.response.ConsultingDTO;
 import isa20.back.model.Consulting;
+import isa20.back.model.Dermatologist;
 import isa20.back.model.DrugReservation;
 import isa20.back.model.Examination;
+import isa20.back.model.Pharmacist;
+import isa20.back.model.Pharmacy;
 import isa20.back.model.User;
 import isa20.back.repository.UserRepository;
 import isa20.back.service.UserService;
@@ -135,5 +139,44 @@ public class UserController
 				
 	}
 	
+	
+	@GetMapping("/consultings/finished")
+	public List< ConsultingDTO > getMyFinishedConsultings() {
+		
+		return UserService.getMyConsultings();
+	}
+	
+	
+	@GetMapping("/getMyPharmacists")
+	public List<Pharmacist> getMyPharmacists(){
+		return this.UserService.getMyPharmacists();
+	}
+	
+	@PostMapping("/ratePharmacist")
+	public ResponseEntity< ApiResponse > ratePharmacist(@RequestBody RatingRequest request) {
+		return this.UserService.ratePharmacist( request );
+	}
+	
+	@PostMapping("/overrideRatePharmacist")
+	public ResponseEntity< ApiResponse > overrideRatePharmacist(@RequestBody RatingRequest request) {
+		return this.UserService.overrideRatePharmacist( request );
+	}
+	
+	
+	@GetMapping("/getMyDermatologists")
+	public List<Dermatologist> getMyDermatologists(){
+		return this.UserService.getMyDermatologists();
+	}
+	
+	
+	@PostMapping("/rateDermatologist")
+	public ResponseEntity< ApiResponse > rateDerm(@RequestBody RatingRequest request) {
+		return this.UserService.rateDermatologist( request );
+	}
+	
+	@PostMapping("/overrideRateDermatologist")
+	public ResponseEntity< ApiResponse > overrideRateDerm(@RequestBody RatingRequest request) {
+		return this.UserService.overrideRateDermatologist( request );
+	}
 	
 }

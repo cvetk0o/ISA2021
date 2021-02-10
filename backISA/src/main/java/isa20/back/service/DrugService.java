@@ -21,6 +21,7 @@ import isa20.back.dto.request.DrugReservationRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.dto.response.DrugSearchDTO;
 import isa20.back.email.EmailServiceImpl;
+import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Drug;
 import isa20.back.model.DrugReservation;
@@ -133,5 +134,50 @@ public class DrugService
 		return new ResponseEntity< ApiResponse >(new ApiResponse( true , "Reservation successfuly created" ) , HttpStatus.OK);
 		
 	}
+	
+	
+	public List< Drug > addDrugToAlergieList(Long drugId) {
+		
+		
+		Drug drug = drugRepo.findById( drugId ).orElseThrow( ()-> new ResourceNotFoundException( "Drug with this id not found" ) );
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ). orElseThrow( () -> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		if(patient.getAlergies().contains( drug )) 
+			throw new AppException( "Drug allready in list" );
+		
+		patient.getAlergies().add( drug );
+		
+		patientRepo.save( patient );
+		
+		
+		return  patient.getAlergies();
+		
+		
+	}
+	
+	public List< Drug > getMyAlergies() {
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ). orElseThrow( () -> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		if(patient.getAlergies().isEmpty())
+			throw new AppException( "Drug list is empty" );
+		
+		return patient.getAlergies();
+		
+	}
+	
+	public List<Drug> removeDrugFromAlergies(Long drugId) {
+		Drug drug = drugRepo.findById( drugId ).orElseThrow( ()-> new ResourceNotFoundException( "Drug with this id not found" ) );
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ). orElseThrow( () -> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		patient.getAlergies().remove( drug );
+		
+		patientRepo.save( patient );
+		
+		return patient.getAlergies();
+	}
+	
 	
 }

@@ -28,4 +28,18 @@ export class DrugService {
     }
     return this.http.post(`${this.restUrl}drugs/reservation` , reservation , httpOptions);
   }
+
+  addToAlergieList(drugId) {
+    return this.http.post(`${this.restUrl}drugs/alergie`,drugId )
+  }
+
+  removeDrugFromAlergieList(drugId) {
+    return this.http.get(`${this.restUrl}drugs/alergies/${drugId}` )
+  }
+
+  getMyAlergieList() {
+    return this.http.get(`${this.restUrl}drugs/alergies`)
+  }
+
+
 }

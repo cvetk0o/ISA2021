@@ -1,0 +1,53 @@
+<p>
+  finished-stuff works!
+</p>
+
+<H3>
+  list of finished consultings
+</H3>
+<div class="row">
+      <ul>
+        <li *ngFor="let consulting of finishedConsultings "> 
+        
+            <div class="column" >
+              <div class="card">
+                <h3> ID SAVETOVANJA : {{consulting.id}}</h3>
+                <p>  farmaceut : {{consulting.pharmacist.name}}</p>
+                <p> apoteka : {{consulting.pharmacy}}</p>
+                <p> pocetak: {{consulting.startTime  | date:'shortTime'}}</p>
+                <p> kraj: {{consulting.endTime | date:'shortTime'}}</p>
+                <p> datum: {{consulting.date | date}}</p>
+                <p></p>
+                <button (click)="oceni(consulting)" id="myBtn">Rate</button>
+              </div>
+            </div>
+      
+      
+      </li>
+
+    </ul>
+</div>
+
+
+<div id="myModal" class="modal" >
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <form [formGroup]="ratingForm" (submit)="rate()">
+     <label>Select what you want to rate:</label>
+      <select formControlName="what">
+        <option value="pharmacist">Pharmacist</option>
+        <option value="pharmacy">Pharmacy</option>
+        <option value="drug" >Drug</option>
+      </select>
+      <label>Input your rating (min=1 , max=5)</label>
+      <input type="number" min="1" max="5" formControlName="rating">
+    <button type="submit" [disabled]="!ratingForm.valid">Submit</button>
+  </form>
+  <app-rating-page></app-rating-page>
+  </div>
+
+ 
+</div>
+
+
+

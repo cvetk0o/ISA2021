@@ -53,4 +53,8 @@ export class PharmacyService {
 
   }
 
+ getMyPharmacies() {
+   return this.http.get(`${this.restUrl}getMyPharmacies`);
+ }
+
 }

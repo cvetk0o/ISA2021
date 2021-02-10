@@ -38,7 +38,7 @@ public class DrugReservation
 	private LocalDateTime createdAt;
 	
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	private Date reservedAt;
+	private LocalDateTime reservedAt;
 	
 	@ManyToOne
 	@JoinColumn(name="itemId")
@@ -53,7 +53,9 @@ public class DrugReservation
 	public DrugReservation( DrugReservationRequest request) throws ParseException {
 		this.createdAt = LocalDateTime.now();
 		
-		this.reservedAt = new SimpleDateFormat("yyyy-MM-dd").parse(request.getReservedAt());  
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+		this.reservedAt = LocalDateTime.parse(request.getReservedAt(), formatter);
 		
 		
 

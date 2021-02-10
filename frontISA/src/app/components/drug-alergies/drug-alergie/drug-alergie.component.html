@@ -1,0 +1,43 @@
+
+<H3>
+ Double click to add to alergie list
+</H3>
+<div class="row">
+      <ul>
+        <li *ngFor="let drug of drugs "> 
+        
+            <div class="column" (dblclick)="selectedDrug(drug.id)">
+              <div class="card">
+                <h3> Name: {{drug.name}}</h3>
+                <p>Type: {{drug.type}}</p>
+                <p>Specification: {{drug.specification}}</p>
+              </div>
+            </div>
+      
+      
+      </li>
+
+    </ul>
+</div>
+
+
+<H3>
+  I am alergic on:          (double click od drug to remove it from list)
+</H3>
+<div class="row">
+      <ul>
+        <li *ngFor="let drug of drugsAlergie "> 
+        
+            <div class="column" (dblclick)="removeDrug(drug.id)">
+              <div class="card">
+                <h3> Name: {{drug.name}}</h3>
+                <p>Type: {{drug.type}}</p>
+                <p>Specification: {{drug.specification}}</p>
+              </div>
+            </div>
+      
+      
+      </li>
+
+    </ul>
+</div>

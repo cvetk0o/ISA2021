@@ -23,6 +23,9 @@ import { ReservationListComponent } from './components/reservation-list/reservat
 import { ConsultingReservationComponent } from './components/consulting-reservation/consulting-reservation/consulting-reservation.component';
 import { PharmacyListComponent } from './components/pharmacy-list/pharmacy-list/pharmacy-list.component';
 import { PharmacyProfileComponent } from './components/pharmacy-profile/pharmacy-profile/pharmacy-profile.component';
+import { DrugAlergieComponent } from './components/drug-alergies/drug-alergie/drug-alergie.component';
+import { FinishedStuffComponent } from './components/finished-stuff/finished-stuff/finished-stuff.component';
+import { RatingPageComponent } from './components/rating-page/rating-page/rating-page.component';
 
 
 @NgModule({
@@ -42,7 +45,10 @@ import { PharmacyProfileComponent } from './components/pharmacy-profile/pharmacy
     ReservationListComponent,
     ConsultingReservationComponent,
     PharmacyListComponent,
-    PharmacyProfileComponent
+    PharmacyProfileComponent,
+    DrugAlergieComponent,
+    FinishedStuffComponent,
+    RatingPageComponent
   ],
   imports: [
     BrowserModule,

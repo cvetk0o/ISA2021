@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -28,13 +31,16 @@ import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Consulting;
 import isa20.back.model.ConsultingReservation;
 import isa20.back.model.Dermatologist;
+import isa20.back.model.DrugReservation;
 import isa20.back.model.Examination;
+import isa20.back.model.Item;
 import isa20.back.model.Patient;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
 import isa20.back.repository.ConsultingRepo;
 import isa20.back.repository.ConsultingReservationRepository;
 import isa20.back.repository.DermatologistRepository;
+import isa20.back.repository.DrugReservationRepository;
 import isa20.back.repository.ExaminationRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.PharmacistRepository;
@@ -68,6 +74,10 @@ public class PharmacyService
 	
 	@Autowired
 	ExaminationRepository examinationRepo;
+	
+	@Autowired
+	DrugReservationRepository drugReservationRepo;
+	
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {
 		
@@ -342,6 +352,41 @@ public class PharmacyService
 		}
 		
 		return pharmacies;
+	}
+	
+	
+	
+	
+	
+	public List<Pharmacy> getMyPharmacies() {
+		
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient not found" ) );
+		
+		List<DrugReservation> reservations  = patient.getDrugReservations().stream().filter( reservation -> reservation.getReservedAt().isBefore( LocalDateTime.now() ) ).collect( Collectors.toList() );
+		
+		List< Item > items = new ArrayList< Item >(); 
+		
+		for(DrugReservation r : reservations) {
+			
+			if(!items.contains( r.getItem() ))
+				items.add( r.getItem() );
+		}
+		
+		Set<Item> it= new HashSet< Item >(items);
+		
+		List<Pharmacy> pharmacies = pharmacyRepo.findAllByItemListIn(it  );
+		
+		
+		List<Pharmacy> unique = new ArrayList< Pharmacy >();
+		
+		for(Pharmacy p : pharmacies)
+			if(!unique.contains( p ))
+				unique.add( p );
+		
+		
+		return unique;
+		
 	}
 	
 }

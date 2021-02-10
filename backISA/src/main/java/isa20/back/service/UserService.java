@@ -3,6 +3,7 @@ package isa20.back.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,32 +20,41 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import isa20.back.dto.response.*;
 
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import isa20.back.security.*;
 
 
 
 import isa20.back.dto.request.LogInRequest;
+import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Address;
 import isa20.back.model.Consulting;
+import isa20.back.model.Dermatologist;
 import isa20.back.model.DrugReservation;
 import isa20.back.model.Examination;
 import isa20.back.model.Item;
 import isa20.back.model.Patient;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
+import isa20.back.model.Rating;
 import isa20.back.model.User;
 import isa20.back.repository.AddressRepository;
 import isa20.back.repository.ConsultingRepo;
+import isa20.back.repository.DermatologistRepository;
 import isa20.back.repository.DrugReservationRepository;
 import isa20.back.repository.ExaminationRepository;
 import isa20.back.repository.ItemRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.PharmacistRepository;
 import isa20.back.repository.PharmacyRepository;
+import isa20.back.repository.RatingRepository;
 import isa20.back.repository.UserRepository;
 
 @Service
@@ -85,6 +95,15 @@ public class UserService
 	
 	@Autowired 
 	ExaminationRepository examRepo;
+	
+	
+	@Autowired
+	DermatologistRepository dermRepo;
+	
+	
+	@Autowired
+	RatingRepository ratingRepo;
+	
 	
 	
 	
@@ -222,7 +241,9 @@ public class UserService
 		
 		Date trenutno = new  Date();
 		
-		boolean moreThanDay = Math.abs(trenutno.getTime() - reservation.getReservedAt().getTime()) > MILLIS_PER_DAY;
+		Date reservationTime =  java.sql.Timestamp.valueOf( reservation.getReservedAt() );
+		
+		boolean moreThanDay = Math.abs(trenutno.getTime() - reservationTime.getTime()) > MILLIS_PER_DAY;
 		
 		if( !moreThanDay)
 			throw new  ResourceNotFoundException( "MANJE JE OD 24h ne moze da se otkaze " );
@@ -320,6 +341,216 @@ public class UserService
 		return new ResponseEntity< ApiResponse >( new ApiResponse( true, "Examination successfuly canceled" ), HttpStatus.OK);
 		
 	}
+	
+	
+	public List< ConsultingDTO > getMyConsultings() {
+		
+		Patient patient = patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		List< Consulting > lista =  patient.getConsultings().stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+		
+		List<ConsultingDTO> zaSlanje = new ArrayList< ConsultingDTO >();
+		for(Consulting c : lista) {
+			
+			Pharmacist pharmacist = pharmacistRepo.findByConsultings( c ).orElseThrow( () -> new ResourceNotFoundException( "not found" ) );
+			
+			Pharmacy pharmacy = pharmacyRepo.findByPharmacists( pharmacist ).orElseThrow( () -> new ResourceNotFoundException( "not found 1" ) );
+			
+			ConsultingDTO cons = new ConsultingDTO( c, pharmacy.getName(), pharmacist );
+			
+			zaSlanje.add( cons );
+		}
+		
+		return zaSlanje;
+		
+	}
+	
+	public List< Pharmacist > getMyPharmacists() {
+		
+		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		if(patient.getConsultings().isEmpty())
+			throw new ResourceNotFoundException( "No finished consultings" );
+		
+		List< Consulting > consultings = patient.getConsultings().stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+		
+		List<Pharmacist> pharmacists = pharmacistRepo.findByConsultingsIdIn( consultings.stream().map(Consulting::getId).collect( Collectors.toList() ) );
+		
+		//remove duplicates
+		List< Pharmacist > unique = new ArrayList< Pharmacist >();
+		for(Pharmacist c : pharmacists)
+			if(!unique.contains( c ))
+				unique.add( c );
+		
+		
+		return unique;
+		
+		
+	}
+	
+	
+	
+	public ResponseEntity< ApiResponse > ratePharmacist(RatingRequest request) {
+		
+		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		Pharmacist pharmacist = pharmacistRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		//proveri da li je prazno
+		
+		if(pharmacist.getRatings().isEmpty() || ratings.isEmpty()) {
+			Rating newRate = new Rating(request.getRating() , patient);
+			
+			pharmacist.getRatings().add( newRate );
+			
+			ratingRepo.save( newRate );
+			
+			pharmacistRepo.save( pharmacist );
+			
+			return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacist" ),HttpStatus.OK);
+			
+		}
+		//proveri u pharmacist da li postoji rating sa ovim pacijentom
+		
+		for(Rating r : ratings) 
+			if(pharmacist.getRatings().contains( r ))
+				throw new ResourceNotFoundException( "You have already rated this pharmacist" );
+		
+		Rating newRate = new Rating(request.getRating() , patient);
+		
+		pharmacist.getRatings().add( newRate );
+		
+		ratingRepo.save( newRate );
+		
+		pharmacistRepo.save( pharmacist );
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacist" ),HttpStatus.OK);
+		
+	}
+	
+	
+	public ResponseEntity< ApiResponse > overrideRatePharmacist( RatingRequest request) {
+		
+		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		Pharmacist pharmacist = pharmacistRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		for(Rating r : ratings) 
+			if(pharmacist.getRatings().contains( r )) {
+				r.setGrade( request.getRating() );
+				r.setVotedAt( LocalDateTime.now() );
+				
+				ratingRepo.save( r );
+				pharmacist.getRatings().set( pharmacist.getRatings().indexOf( r ), r );
+				
+				pharmacistRepo.save( pharmacist );
+				break;
+			}
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully submited new grade for pharmacist" ),HttpStatus.OK);
+		
+	}
+	
+	public List< Dermatologist > getMyDermatologists() {
+		
+		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		if(patient.getConsultings().isEmpty())
+			throw new ResourceNotFoundException( "No finished Examinations" );
+		
+		List< Examination > examinations = examRepo.findByPatientId( getMyId() );
+		
+		List< Examination > examinations1 = examinations.stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+		
+		
+		//remove duplicates
+		List< Dermatologist> unique = new ArrayList< Dermatologist >();
+		for(Examination e : examinations1 )
+			if(!unique.contains( e.getDermatologist() ))
+				unique.add( e.getDermatologist() );
+		
+		
+		return unique;
+		
+		
+	}
+	
+	
+	
+	
+	public ResponseEntity< ApiResponse > rateDermatologist(RatingRequest request) {
+		
+		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		Dermatologist dermatologist = dermRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Dermatologist with this id not found" ) );
+		
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		//proveri da li je prazno
+		
+		if(dermatologist.getRatings().isEmpty() || ratings.isEmpty()) {
+			Rating newRate = new Rating(request.getRating() , patient);
+			
+			dermatologist.getRatings().add( newRate );
+			
+			ratingRepo.save( newRate );
+			
+			dermRepo.save(dermatologist);
+			
+			return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated dermatologist" ),HttpStatus.OK);
+			
+		}
+		//proveri u pharmacist da li postoji rating sa ovim pacijentom
+		
+		for(Rating r : ratings) 
+			if(dermatologist.getRatings().contains( r ))
+				throw new ResourceNotFoundException( "You have already rated this dermatologist" );
+		
+		
+		Rating newRate = new Rating(request.getRating() , patient);
+		
+		dermatologist.getRatings().add( newRate );
+		
+		ratingRepo.save( newRate );
+		
+		dermRepo.save(dermatologist);
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacist" ),HttpStatus.OK);
+		
+	}
+	
+	
+	
+	public ResponseEntity< ApiResponse > overrideRateDermatologist( RatingRequest request) {
+		
+		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		Dermatologist dermatologist = dermRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Dermatologist with this id not found" ) );
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		for(Rating r : ratings) 
+			if(dermatologist.getRatings().contains( r )) {
+				r.setGrade( request.getRating() );
+				r.setVotedAt( LocalDateTime.now() );
+				
+				ratingRepo.save( r );
+				dermatologist.getRatings().set( dermatologist.getRatings().indexOf( r ), r );
+				
+				dermRepo.save( dermatologist );
+				break;
+			}
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully submited new grade for dermatologist" ),HttpStatus.OK);
+		
+	}
+	
 	
 	
 }

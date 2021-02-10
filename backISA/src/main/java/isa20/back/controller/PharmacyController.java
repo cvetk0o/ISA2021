@@ -120,7 +120,10 @@ public class PharmacyController
 		return this.pharmacyService.getAvailableExaminations(pharmacyId);
 	}
 	
-	
+	@GetMapping("/getMyPharmacies")
+	public List<Pharmacy> getMyPharmacies() {
+		return this.pharmacyService.getMyPharmacies();
+	}
 	
 	
 	

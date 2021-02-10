@@ -3,6 +3,7 @@ package isa20.back.repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 import org.springframework.data.domain.Sort;
@@ -34,6 +35,8 @@ public interface PharmacyRepository extends JpaRepository< Pharmacy, Long>, Quer
 		Optional< Pharmacy > findByPharmacists(Pharmacist pharm);
 		
 		List<Pharmacy> findAllByIdIn(List< Long > ids , Sort s);
+		
+		List<Pharmacy> findAllByItemListIn(Set<Item> items);
  	
 	 @Override
 	    default public void customize(

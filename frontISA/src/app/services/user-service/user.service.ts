@@ -51,6 +51,49 @@ export class UserService {
     return this.http.get(`${this.restUrl}cancelExamination/${examinationId}`);
   }
 
+  addToAlergieList(drugId) {
+    return this.http.post(`${this.restUrl}drugs/alergie`,drugId )
+  }
+
+
+  getFinishedConsultings() {
+    return this.http.get(`${this.restUrl}consultings/finished`);
+  }
+
+
+    rateConsulting(data,consultingId) {
+      return this.http.post(`${this.restUrl}consultings/rate/${consultingId}` , data);
+    }
+
+
+    getMyPharmacists() {
+      return this.http.get(`${this.restUrl}getMyPharmacists`);
+    }
+
+    ratePharmacist(data) {
+      return this.http.post(`${this.restUrl}ratePharmacist` , data);
+    }
+
+    overrideRatePharmacist(data) {
+      return this.http.post(`${this.restUrl}overrideRatePharmacist` , data);
+    }
+
+
+    getMyDermatologists() {
+      return this.http.get(`${this.restUrl}getMyDermatologists`);
+    }
+
+    rateDermatologist(data) {
+      return this.http.post(`${this.restUrl}rateDermatologist` , data);
+    }
+
+    overrideRateDermatologist(data) {
+      return this.http.post(`${this.restUrl}overrideRateDermatologist` , data);
+    }
+
+
 }
+
+
 
 

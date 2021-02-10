@@ -57,4 +57,24 @@ public class DrugController
 	}
 	
 	
+	@PostMapping("/drugs/alergie")
+	public List<Drug> addDrugToAlergieList(@RequestBody Long drugId) {
+		
+		return this.drugService.addDrugToAlergieList(drugId);
+	}
+	
+	@GetMapping("/drugs/alergies")
+	public List< Drug > getMyAlergies() {
+		
+		return this.drugService.getMyAlergies();
+	}
+	
+	@GetMapping("/drugs/alergies/{drugId}")
+	public List<Drug> removeDrugFromAlergieList(@PathVariable Long drugId){
+		
+		return this.drugService.removeDrugFromAlergies( drugId );
+	}
+	
 }
+
+

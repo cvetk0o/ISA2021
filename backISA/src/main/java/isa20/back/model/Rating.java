@@ -13,6 +13,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +33,7 @@ public class Rating
 	@Max(5)
 	private int grade;
 	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private LocalDateTime votedAt;
 	
 	@ManyToOne
@@ -40,6 +44,13 @@ public class Rating
 	
 	public Rating() {
 		
+	}
+	
+	public Rating(int grade , Patient p) {
+		this.grade = grade;
+		this.patient=p;
+		this.votedAt =  LocalDateTime.now();
+	
 	}
 
 }

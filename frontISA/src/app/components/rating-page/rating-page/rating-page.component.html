@@ -1,0 +1,56 @@
+<p>
+  rating-page works!
+</p>
+
+<div class="row">
+  <div class="column"> <button (click)="ratePharmacists()">Rate Pharmacists</button></div>
+  <div class="column"><button (click)="ratePharmacy()">Rate Pharmacy</button></div>
+  <div class="column"><button (click)="rateDermatologists()">Rate Dermatologist</button></div>
+  <div class="column"><button>Rate Drug</button></div>
+</div>
+
+
+<div *ngIf="ratePharmacistDiv">
+
+  <form [formGroup]="ratingForm" (submit)="ratePharmacistsSubmit()">
+    <label>Select whom you want to rate:</label>
+    <select formControlName="id" >
+      <option  value="{{pharmacist.id}}" *ngFor="let pharmacist of pharmacists">{{ pharmacist.name}}</option>
+    </select>
+     <label>Input your rating (min=1 , max=5)</label>
+     <input type="number" min="1" max="5" formControlName="rating">
+   <button type="submit" [disabled]="!ratingForm.valid">Submit</button>
+ </form>
+
+</div>
+
+
+<div *ngIf="rateDermatologistDiv">
+  OCENI DERMATOLOGA
+  <form [formGroup]="ratingForm" (submit)="rateDermatologistSubmit()">
+    <label>Select whom you want to rate:</label>
+    <select formControlName="id" >
+      <option  value="{{dermatologist.id}}" *ngFor="let dermatologist of dermatologists">{{ dermatologist.name}}</option>
+    </select>
+     <label>Input your rating (min=1 , max=5)</label>
+     <input type="number" min="1" max="5" formControlName="rating">
+   <button type="submit" [disabled]="!ratingForm.valid">Submit</button>
+ </form>
+
+</div>
+
+
+
+<div *ngIf="ratePharmacyDiv">
+  OCENI Apoteku
+  <form [formGroup]="ratingForm" (submit)="ratePharmacySubmit()">
+    <label>Select whom you want to rate:</label>
+    <select formControlName="id" >
+      <option  value="{{pharmacy.id}}" *ngFor="let pharmacy of pharmacies">{{ pharmacy.name}}</option>
+    </select>
+     <label>Input your rating (min=1 , max=5)</label>
+     <input type="number" min="1" max="5" formControlName="rating">
+   <button type="submit" [disabled]="!ratingForm.valid">Submit</button>
+ </form>
+
+</div>
