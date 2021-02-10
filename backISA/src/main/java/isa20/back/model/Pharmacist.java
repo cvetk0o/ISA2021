@@ -21,6 +21,9 @@ import lombok.Setter;
 public class Pharmacist extends User
 {
 	
+
+	private double avgRate;
+	
 	@OneToMany
 	@JoinColumn(name= "pharmacistId")
 	private List< Vacation > vacations;
@@ -41,6 +44,13 @@ public class Pharmacist extends User
 	
 	
 	public Pharmacist() {
+		
+	}
+	
+	
+	public void calculateAvg() {
+		
+		this.avgRate = this.ratings.stream().mapToInt( rating -> rating.getGrade() ).average().orElse( 0.0 );
 		
 	}
 }

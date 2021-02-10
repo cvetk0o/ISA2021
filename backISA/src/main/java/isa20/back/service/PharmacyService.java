@@ -25,6 +25,7 @@ import com.querydsl.core.types.Predicate;
 
 
 import isa20.back.dto.request.ConsultingReservationRequest;
+import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
@@ -37,6 +38,7 @@ import isa20.back.model.Item;
 import isa20.back.model.Patient;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
+import isa20.back.model.Rating;
 import isa20.back.repository.ConsultingRepo;
 import isa20.back.repository.ConsultingReservationRepository;
 import isa20.back.repository.DermatologistRepository;
@@ -45,6 +47,7 @@ import isa20.back.repository.ExaminationRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.PharmacistRepository;
 import isa20.back.repository.PharmacyRepository;
+import isa20.back.repository.RatingRepository;
 import javassist.expr.NewArray;
 
 @Service
@@ -77,6 +80,9 @@ public class PharmacyService
 	
 	@Autowired
 	DrugReservationRepository drugReservationRepo;
+	
+	@Autowired
+	RatingRepository ratingRepo;
 	
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {
@@ -388,5 +394,75 @@ public class PharmacyService
 		return unique;
 		
 	}
+	
+	public ResponseEntity< ApiResponse > ratePharmacy(RatingRequest request) {
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient not found" ) );
+		
+		Pharmacy pharmacy  = pharmacyRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Pharmacy not found" ) );
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		
+		
+		if(pharmacy.getRatings().isEmpty() || ratings.isEmpty()) {
+			Rating newRate = new Rating(request.getRating() , patient);
+			
+			pharmacy.getRatings().add( newRate );
+			
+			ratingRepo.save( newRate );
+			pharmacy.calculateAvg();
+			pharmacyRepo.save( pharmacy );
+			
+			return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacy" ),HttpStatus.OK);
+			
+		}
+		
+		for(Rating r : ratings) 
+			if(pharmacy.getRatings().contains( r ))
+				throw new ResourceNotFoundException( "You have already rated this pharmacy" );
+		
+		Rating newRate = new Rating(request.getRating() , patient);
+		
+		pharmacy.getRatings().add( newRate );
+		
+		ratingRepo.save( newRate );
+		
+		
+		pharmacy.calculateAvg();
+		pharmacyRepo.save( pharmacy );
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacy" ),HttpStatus.OK);
+		
+		
+	}
+	
+	public ResponseEntity< ApiResponse > overrideRatePharmacy(RatingRequest request) {
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient not found" ) );
+		
+		Pharmacy pharmacy  = pharmacyRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Pharmacy not found" ) );
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		for(Rating r : ratings) 
+			if(pharmacy.getRatings().contains( r )) {
+				r.setGrade( request.getRating() );
+				r.setVotedAt( LocalDateTime.now() );
+				
+				ratingRepo.save( r );
+				pharmacy.getRatings().set( pharmacy.getRatings().indexOf( r ), r );
+				
+				pharmacy.calculateAvg();
+				pharmacyRepo.save( pharmacy );
+				break;
+			}
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully submited new grade for pharmacy" ),HttpStatus.OK);
+		
+	}
+	
+	
+
 	
 }

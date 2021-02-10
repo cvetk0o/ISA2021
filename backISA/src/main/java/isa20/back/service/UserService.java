@@ -230,7 +230,9 @@ public class UserService
 		
 		Patient patient = patientRepo.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "Patient not found 1" ) );
 		
-		return patient.getDrugReservations();
+		List<DrugReservation> reservations = patient.getDrugReservations().stream().filter( reservation -> reservation.getReservedAt().isBefore( LocalDateTime.now() ) ).collect( Collectors.toList() );
+		
+		return reservations;
 		
 	}
 	
@@ -408,6 +410,7 @@ public class UserService
 			
 			ratingRepo.save( newRate );
 			
+			pharmacist.calculateAvg();
 			pharmacistRepo.save( pharmacist );
 			
 			return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacist" ),HttpStatus.OK);
@@ -425,6 +428,7 @@ public class UserService
 		
 		ratingRepo.save( newRate );
 		
+		pharmacist.calculateAvg();
 		pharmacistRepo.save( pharmacist );
 		
 		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacist" ),HttpStatus.OK);
@@ -448,6 +452,7 @@ public class UserService
 				ratingRepo.save( r );
 				pharmacist.getRatings().set( pharmacist.getRatings().indexOf( r ), r );
 				
+				pharmacist.calculateAvg();
 				pharmacistRepo.save( pharmacist );
 				break;
 			}
@@ -501,6 +506,7 @@ public class UserService
 			
 			ratingRepo.save( newRate );
 			
+			dermatologist.calculateAvg();
 			dermRepo.save(dermatologist);
 			
 			return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated dermatologist" ),HttpStatus.OK);
@@ -519,6 +525,7 @@ public class UserService
 		
 		ratingRepo.save( newRate );
 		
+		dermatologist.calculateAvg();
 		dermRepo.save(dermatologist);
 		
 		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated pharmacist" ),HttpStatus.OK);
@@ -542,7 +549,7 @@ public class UserService
 				
 				ratingRepo.save( r );
 				dermatologist.getRatings().set( dermatologist.getRatings().indexOf( r ), r );
-				
+				dermatologist.calculateAvg();
 				dermRepo.save( dermatologist );
 				break;
 			}

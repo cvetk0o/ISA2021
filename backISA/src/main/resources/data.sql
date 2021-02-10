@@ -65,15 +65,15 @@ VALUES
 
 
 INSERT INTO `isa20`.`pharmacy`
-(`id`,`consulting_price`,`description`,`name`,`address_id`)
+(`id`,`avg_rate`,`consulting_price`,`description`,`name`,`address_id`)
 values
-(1,200,"opise neke apoteke","jankovic" , 1) ;
+(1,3,200,"opise neke apoteke","jankovic" , 1) ;
 
 
 INSERT INTO `isa20`.`pharmacy`
-(`id`,`consulting_price`,`description`,`name`,`address_id`)
+(`id`,`avg_rate`,`consulting_price`,`description`,`name`,`address_id`)
 values
-(2,320,"opise neke apoteke 2","milosevic" , 2) ;
+(2,2,320,"opise neke apoteke 2","milosevic" , 2) ;
 
 
 
@@ -90,20 +90,29 @@ VALUES
 ("Patient",1,1, "petar.ponjevic7@gmail.com", "ponjevic" ,"petar","'$2a$10$FByRnmrWkzf.8i3rYzaVQuUQuB1hFwmbX8a/iavMkIe1rMET3emni'","06412345",2);
 
 INSERT INTO `isa20`.`user`
+( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`, `avg_rate`, `address_id`)
+VALUES
+("Dermatologist",2,1,"petar.ponjevic6@gmail.com", "milosevic" ,"metar","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'" ,"06412345",2,3);
+
+INSERT INTO `isa20`.`user`
+( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number` , `avg_rate`,`working_hours_from`,`working_hours_to`, `address_id` ,`pharmacy_id`)
+VALUES
+("Pharmacist",3,0, "petar.ponjevic5@gmail.com", "jankovic" ,"dzoni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",4,"08:00","16:00",4 ,1);
+
+INSERT INTO `isa20`.`user`
+( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`, `avg_rate`,`working_hours_from`,`working_hours_to`, `address_id`,`pharmacy_id`)
+VALUES
+("Pharmacist",4,0, "petar.ponjevic4@gmail.com", "jankovic" ,"poni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",2,"12:00","20:00",5 ,2);
+
+
+INSERT INTO `isa20`.`user`
 ( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`, `address_id`)
 VALUES
-("Dermatologist",2,1,"petar.ponjevic6@gmail.com", "milosevic" ,"metar","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345",3);
+("Patient",5,1, "mokocev403@botfed.com", "pp" ,"pp","$2a$10$VcOWM4BngtrhYi0lNkIYKuv71BUQgqMBbJoTBOzFRK3NFWOH05eN.","pp ",5 );
 
-INSERT INTO `isa20`.`user`
-( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number` ,`working_hours_from`,`working_hours_to`, `address_id` ,`pharmacy_id`)
-VALUES
-("Pharmacist",3,0, "petar.ponjevic5@gmail.com", "jankovic" ,"dzoni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345","08:00","16:00",4 ,1);
 
-INSERT INTO `isa20`.`user`
-( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number`,`working_hours_from`,`working_hours_to`, `address_id`,`pharmacy_id`)
-VALUES
-("Pharmacist",4,0, "petar.ponjevic4@gmail.com", "jankovic" ,"poni","'$2a$10$kphiKvaevoKnWf1b259PAOKZqapf5jR0zmcopR0jpiwB8zixT3kTS'","06412345","12:00","20:00",5 ,2);
 
+INSERT INTO `isa20`.`user_authorities` (`user_id`,`authorities_id`) VALUES ( 5,1 );
 
 
 INSERT INTO `isa20`.`pharmacy_dermatologists`(`pharmacy_id`,`dermatologists_id`) VALUES ( 1, 2);

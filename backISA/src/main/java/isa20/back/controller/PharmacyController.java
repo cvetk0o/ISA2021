@@ -27,6 +27,7 @@ import com.querydsl.core.types.Predicate;
 
 
 import isa20.back.dto.request.ConsultingReservationRequest;
+import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Consulting;
@@ -125,6 +126,17 @@ public class PharmacyController
 		return this.pharmacyService.getMyPharmacies();
 	}
 	
+	
+	@PostMapping("/ratePharmacy")
+	public ResponseEntity< ApiResponse > ratePharmacist(@RequestBody RatingRequest request) {
+		return this.pharmacyService.ratePharmacy( request );
+	}
+	
+	
+	@PostMapping("/overrideRatePharmacy")
+	public ResponseEntity< ApiResponse > overrideRatePharmacist(@RequestBody RatingRequest request) {
+		return this.pharmacyService.overrideRatePharmacy( request );
+	}
 	
 	
 }

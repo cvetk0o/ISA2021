@@ -11,6 +11,7 @@ import { DrugReservationComponent } from './components/drug-reservation/drug-res
 import { ConsultingReservationComponent } from './components/consulting-reservation/consulting-reservation/consulting-reservation.component';
 import { PharmacyListComponent } from './components/pharmacy-list/pharmacy-list/pharmacy-list.component';
 import { PharmacyProfileComponent } from './components/pharmacy-profile/pharmacy-profile/pharmacy-profile.component';
+import { RatingPageComponent } from './components/rating-page/rating-page/rating-page.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'consultingReservation' , component: ConsultingReservationComponent},
   { path: 'pharmacyList' , component: PharmacyListComponent},
   { path: 'pharmacyProfile/:id' ,component: PharmacyProfileComponent},
+  { path: 'ratingPage' ,component: RatingPageComponent},
   { path: '**', redirectTo: '' }
 ];
 

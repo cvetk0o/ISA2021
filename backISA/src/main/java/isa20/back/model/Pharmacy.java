@@ -33,6 +33,8 @@ public class Pharmacy
 	
 	private long consultingPrice;
 	
+	private double avgRate;
+	
 	@ManyToOne
 	private Address address;
 	
@@ -47,9 +49,19 @@ public class Pharmacy
 	 @JoinColumn(name="pharmacy_id")
 	private Set< Item> itemList;
 	
-	
+	@OneToMany
+	@JoinColumn(name="pharmacyId")
+	private List< Rating > ratings;
 	
 	public Pharmacy() {
+		
+	}
+	
+	
+	
+	public void calculateAvg() {
+		
+		this.avgRate = this.ratings.stream().mapToInt( rating -> rating.getGrade() ).average().orElse( 0.0 );
 		
 	}
 	
