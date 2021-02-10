@@ -2,15 +2,11 @@ package isa20.back.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
+import isa20.back.dto.PharmacyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -83,6 +79,20 @@ public class PharmacyService
 	
 	@Autowired
 	RatingRepository ratingRepo;
+
+	public Pharmacy editPharmacy(PharmacyDTO pharmacy) {
+
+		Pharmacy queryResult = pharmacyRepo.getOne(pharmacy.getId());
+
+		if(queryResult != null) {
+			queryResult.setName(pharmacy.getName());
+			queryResult.setDescription(pharmacy.getDescription());
+		}
+
+		pharmacyRepo.save(queryResult);
+
+		return pharmacyRepo.save(queryResult);
+	}
 	
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {

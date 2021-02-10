@@ -9,6 +9,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
+import isa20.back.dto.PharmacyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
@@ -66,8 +67,12 @@ public class PharmacyController
 	
 	        return pharmacyService.searchPharm(predicate);
 	    }
-	    
-	
+
+	@PostMapping()
+	public Pharmacy editPharmacy(@RequestBody PharmacyDTO pharmacy) {
+
+		return pharmacyService.editPharmacy(pharmacy);
+	}
 	
 	@PostMapping("/availablePharmacies")
 	public List<Pharmacy> getAvailablePharmacies( @RequestBody ConsultingReservationRequest request) {
