@@ -104,6 +104,17 @@ public class PharmacyService
 
 		return  queryResult;
 	}
+
+	public Pharmacy addDermatologist(Long id, Dermatologist dermatologist) {
+
+		Pharmacy queryResult = pharmacyRepo.getOne(id);
+
+		queryResult.getDermatologists().add(dermatologist);
+
+		pharmacyRepo.save(queryResult);
+
+		return queryResult;
+	}
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {
 		

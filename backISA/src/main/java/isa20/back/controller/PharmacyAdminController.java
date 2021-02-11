@@ -42,8 +42,13 @@ public class PharmacyAdminController {
     }
 
     @PostMapping("/{pharmacyID}/addDermatologist")
-    public Dermatologist createDermatologist(@RequestBody DermatologistDTO dermatologist) {
-        return dermatologistService.createDermatologist(dermatologist);
+    public Dermatologist createDermatologist(@PathVariable Long pharmacyID, @RequestBody DermatologistDTO dermatologist) {
+
+        Dermatologist newDermatologies = dermatologistService.createDermatologist(dermatologist);
+
+        pharmacyService.addDermatologist(pharmacyID, newDermatologies);
+
+        return newDermatologies;
     }
 
 }
