@@ -41,4 +41,8 @@ public class DermatologistService {
         return dermatologistRepository.save(newDermatologist);
 
     }
+
+    public void deleteDermatologist(DermatologistDTO dermatologistDTO) {
+        dermatologistRepository.deleteById(dermatologistDTO.getId());
+    }
 }

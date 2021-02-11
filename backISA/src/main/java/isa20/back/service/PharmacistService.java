@@ -1,6 +1,7 @@
 package isa20.back.service;
 
 import isa20.back.dto.PharmacistDTO;
+import isa20.back.dto.PharmacyDTO;
 import isa20.back.model.Address;
 import isa20.back.model.Pharmacist;
 import isa20.back.repository.AddressRepository;
@@ -40,9 +41,16 @@ public class PharmacistService {
         newPharmacist.setWorkingHoursFrom(pharmacistDTO.getWorkingHoursFrom());
         newPharmacist.setWorkingHoursTo(pharmacistDTO.getWorkingHoursTo());
 
-        Pharmacist savedPharmacist = pharmacistRepository.save(newPharmacist);
+        return pharmacistRepository.save(newPharmacist);
 
-        return savedPharmacist;
+    }
 
+    public void deletePharmacist(PharmacistDTO pharmacistDTO) {
+
+        Pharmacist pharmacist = pharmacistRepository.getOne(pharmacistDTO.getId());
+
+        if(pharmacist.getConsultings().isEmpty()) {
+            pharmacistRepository.deleteById(pharmacistDTO.getId());
+        }
     }
 }

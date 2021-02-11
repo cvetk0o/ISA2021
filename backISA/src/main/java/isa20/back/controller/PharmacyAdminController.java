@@ -51,4 +51,11 @@ public class PharmacyAdminController {
         return newDermatologies;
     }
 
+    @DeleteMapping("/{pharmacyID}/deletePharmacist")
+    public void deletePharmacist(@PathVariable Long pharmacyID, @RequestBody PharmacistDTO pharmacistDTO) {
+
+        pharmacistService.deletePharmacist(pharmacistDTO);
+
+    }
+
 }
