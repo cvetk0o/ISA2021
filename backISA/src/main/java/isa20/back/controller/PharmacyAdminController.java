@@ -1,9 +1,12 @@
 package isa20.back.controller;
 
+import isa20.back.dto.DermatologistDTO;
 import isa20.back.dto.PharmacistDTO;
 import isa20.back.dto.PharmacyDTO;
+import isa20.back.model.Dermatologist;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
+import isa20.back.service.DermatologistService;
 import isa20.back.service.PharmacistService;
 import isa20.back.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ public class PharmacyAdminController {
     @Autowired
     private PharmacistService pharmacistService;
 
+    @Autowired
+    private DermatologistService dermatologistService;
+
     @PostMapping("/editPharmacy")
     public Pharmacy editPharmacy(@RequestBody PharmacyDTO pharmacy) {
 
@@ -31,6 +37,11 @@ public class PharmacyAdminController {
     @PostMapping("/addPharmacist")
     public Pharmacist createPharmacist(@RequestBody PharmacistDTO pharmacist) {
         return pharmacistService.createPharmacist(pharmacist);
+    }
+
+    @PostMapping("/addDermatologist")
+    public Dermatologist createDermatologist(@RequestBody DermatologistDTO dermatologist) {
+        return dermatologistService.createDermatologist(dermatologist);
     }
 
 }
