@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 
 import isa20.back.dto.PharmacyDTO;
+import isa20.back.model.*;
+import isa20.back.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,25 +27,6 @@ import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
-import isa20.back.model.Consulting;
-import isa20.back.model.ConsultingReservation;
-import isa20.back.model.Dermatologist;
-import isa20.back.model.DrugReservation;
-import isa20.back.model.Examination;
-import isa20.back.model.Item;
-import isa20.back.model.Patient;
-import isa20.back.model.Pharmacist;
-import isa20.back.model.Pharmacy;
-import isa20.back.model.Rating;
-import isa20.back.repository.ConsultingRepo;
-import isa20.back.repository.ConsultingReservationRepository;
-import isa20.back.repository.DermatologistRepository;
-import isa20.back.repository.DrugReservationRepository;
-import isa20.back.repository.ExaminationRepository;
-import isa20.back.repository.PatientRepository;
-import isa20.back.repository.PharmacistRepository;
-import isa20.back.repository.PharmacyRepository;
-import isa20.back.repository.RatingRepository;
 import javassist.expr.NewArray;
 
 @Service
@@ -80,6 +63,9 @@ public class PharmacyService
 	@Autowired
 	RatingRepository ratingRepo;
 
+	@Autowired
+	AddressRepository addressRepository;
+
 	public Pharmacy editPharmacy(PharmacyDTO pharmacy) {
 
 		Pharmacy queryResult = pharmacyRepo.getOne(pharmacy.getId());
@@ -87,6 +73,10 @@ public class PharmacyService
 		if(queryResult != null) {
 			queryResult.setName(pharmacy.getName());
 			queryResult.setDescription(pharmacy.getDescription());
+
+			Address address = compareAddress(queryResult.getAddress(), pharmacy.getCountry(), pharmacy.getCity(),pharmacy.getStreet(), pharmacy.getNumber());
+
+			queryResult.setAddress(address);
 		}
 
 		pharmacyRepo.save(queryResult);
@@ -492,7 +482,27 @@ public class PharmacyService
 		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully submited new grade for pharmacy" ),HttpStatus.OK);
 		
 	}
-	
+
+	public Address compareAddress(Address address, String country, String city, String street, String number) {
+
+		if(
+				address.getCountry().equals(country) &&
+				address.getCity().equals(city) &&
+				address.getStreet().equals(street) &&
+				address.getNumber().equals(number)
+		) {
+			return  address;
+		}
+
+		address.setCountry(country);
+		address.setCity(city);
+		address.setStreet(street);
+		address.setNumber(number);
+
+		address = addressRepository.save(address);
+
+		return address;
+	}
 	
 
 	
