@@ -93,7 +93,17 @@ public class PharmacyService
 
 		return pharmacyRepo.save(queryResult);
 	}
-	
+
+	public Pharmacy addPharmacist(Long id, Pharmacist pharmacist) {
+
+		Pharmacy queryResult = pharmacyRepo.getOne(id);
+
+		queryResult.getPharmacists().add(pharmacist);
+
+		pharmacyRepo.save(queryResult);
+
+		return  queryResult;
+	}
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {
 		

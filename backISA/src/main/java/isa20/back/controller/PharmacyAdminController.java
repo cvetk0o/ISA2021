@@ -10,10 +10,7 @@ import isa20.back.service.DermatologistService;
 import isa20.back.service.PharmacistService;
 import isa20.back.service.PharmacyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/pharmacyAdminController")
@@ -34,12 +31,17 @@ public class PharmacyAdminController {
         return pharmacyService.editPharmacy(pharmacy);
     }
 
-    @PostMapping("/addPharmacist")
-    public Pharmacist createPharmacist(@RequestBody PharmacistDTO pharmacist) {
-        return pharmacistService.createPharmacist(pharmacist);
+    @PostMapping("/{pharmacyID}/addPharmacist")
+    public Pharmacist createPharmacist(@PathVariable Long pharmacyID, @RequestBody PharmacistDTO pharmacist) {
+
+        Pharmacist newPharacist = pharmacistService.createPharmacist(pharmacist);
+
+        pharmacyService.addPharmacist(pharmacyID, newPharacist);
+
+        return newPharacist;
     }
 
-    @PostMapping("/addDermatologist")
+    @PostMapping("/{pharmacyID}/addDermatologist")
     public Dermatologist createDermatologist(@RequestBody DermatologistDTO dermatologist) {
         return dermatologistService.createDermatologist(dermatologist);
     }
