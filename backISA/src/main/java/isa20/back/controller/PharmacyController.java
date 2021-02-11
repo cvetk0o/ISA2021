@@ -67,12 +67,6 @@ public class PharmacyController
 	
 	        return pharmacyService.searchPharm(predicate);
 	    }
-
-	@PostMapping()
-	public Pharmacy editPharmacy(@RequestBody PharmacyDTO pharmacy) {
-
-		return pharmacyService.editPharmacy(pharmacy);
-	}
 	
 	@PostMapping("/availablePharmacies")
 	public List<Pharmacy> getAvailablePharmacies( @RequestBody ConsultingReservationRequest request) {

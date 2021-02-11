@@ -92,6 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint( unauthorizedHandler ).and().sessionManagement()
 		.sessionCreationPolicy( SessionCreationPolicy.STATELESS ).and().authorizeRequests()
 		.antMatchers( "/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js" ).permitAll()
+		.antMatchers("/api/pharmacyAdminController/**").permitAll()
 		.antMatchers( "/api/auth/signUp" , "/api/auth/login" ,"/api/auth/activate/**"  , "/api/pharmacyController/**" , "/api/userFilterController/**" , "/api/userController/**" , "/api/drugController/**" , "/api/patientController/**").permitAll().antMatchers( "/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability" ).permitAll()
 		.antMatchers( HttpMethod.GET, "/api/user/**" ).permitAll().anyRequest().authenticated();
 
