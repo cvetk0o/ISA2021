@@ -1,0 +1,23 @@
+.mainContainer {
+    width: 600px;
+    height: 500px;
+    margin: auto;
+    margin-top: 8%;
+    margin-left: 33%;
+    background-color: aquamarine;
+    position: absolute;
+    background-image: url("/src/images/drugsSignUp.jpg");
+    box-shadow: -20px 15px 10px #888888;
+}
+
+
+
+#formContainer {
+    width: 300px; /* Can be in percentage also. */
+    margin-top: 25%;
+    margin-left: 25%;
+    padding: 10px;
+    position: absolute;
+    background-color: #80FFDB;
+    
+}

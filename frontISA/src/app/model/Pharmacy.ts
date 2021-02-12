@@ -6,4 +6,5 @@ export interface Pharmacy {
     description: string;
     address: Address;
     consultingPrice: number;
+    avgRate:number;
 }

@@ -63,6 +63,23 @@ public class Pharmacy
 		
 		this.avgRate = this.ratings.stream().mapToInt( rating -> rating.getGrade() ).average().orElse( 0.0 );
 		
+			if(this.avgRate < 1.5 ) {
+				this.avgRate = 1;
+			
+			}else if( this.avgRate>=1.5 && this.avgRate <2.5) {
+				
+				this.avgRate = 2;
+			}else if( this.avgRate>=2.5 && this.avgRate <3.5) {
+				
+				this.avgRate = 3;
+			}else if( this.avgRate>=3.5 && this.avgRate <4.5) {
+				
+				this.avgRate = 4;
+			}else if( this.avgRate>4.5) {
+				
+				this.avgRate = 5;
+			}
+		
 	}
 	
 }

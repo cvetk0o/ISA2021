@@ -1,43 +1,36 @@
- 
-
-  <table style="width:30%">
-  <tr>
-    <th>
-      PREGLED REZERVACIJE
-    </th>
-  </tr>
-    <tr>
-      <td>Izabrani lek :</td>
-      <td>{{reservation.drugId}}</td>
-    </tr>
-    <tr>
-      <td>Apoteka : </td>
-      <td>{{reservation.pharmacyId}}</td>
-    </tr>
-
-    <tr>
-      <td>Cena : </td>
-    </tr>
-
-    <tr>
-      <td>Rezervisano za : </td>
-      <td>{{reservation.reservedAt}}</td>
-    </tr>
-  </table>
 
 
 
+<div class="kolona1">
 
-
-<H3>
-  Rezultati pretrage:
+<H3 *ngIf="som">
+  <form [formGroup]="searchForm" (submit) ="search()">
+    <div class="row">
+  
+    <label for="name">Name</label>
+    <input formControlName="name" id="name" />
+  
+   
+    <label for="city">Type</label>
+    <input formControlName="type" id="city"  />
+  
+  <div class="column">
+    <button type="submit" >Submit</button>
+  </div>
+  
+  </div>
+  </form>
 </H3>
 <div class="row">
       <ul>
         <li *ngFor="let drug of drugs "> 
         
-            <div class="column" (click)="selectedDrug(drug.id)">
+            <div  style=" 
+            width: 80%;
+            padding: 0 10px 10px;"
+             (click)="selectedDrug(drug.id)">
               <div class="card">
+                <div class="drugIcon"></div>
                 <h3> Name: {{drug.name}}</h3>
                 <p>Type: {{drug.type}}</p>
                 <p>Specification: {{drug.specification}}</p>
@@ -49,6 +42,8 @@
 
     </ul>
 </div>
+</div>
+<div class="kolona2">
 
 <h3>Lek pronadjen u apotekama: </h3>
 
@@ -56,8 +51,11 @@
   <ul>
     <li *ngFor="let item of items "> 
     
-        <div class="column" >
+        <div  style=" 
+        width: 80%;
+        padding: 0 10px 10px;" >
           <div class="card" (click)="selectedPharmacy(item.itemId , item.pharmacyId)">
+            <div class="pharmacyIcon"></div>
             <h3> Pharmacy: {{item.pharmacyName}}</h3>
             <p>Price: {{item.itemPrice}}</p>
             
@@ -70,9 +68,15 @@
 </ul>
 </div>
 
+</div>
+
+<div class="kolona3">
+
 <div  *ngIf="dateDiv">
   <h3>Izaberite datum preuzimanja</h3>
   <input [formControl]="dateStringControl" type="date"  min="2018-01-01" max="2028-12-31"  (ngModelChange)="valuechange($event)">
 
   <button (click)="makeReservation()" [disabled]="reservation.reservedAt ==null">  Rezervisi lek</button>
+</div>
+
 </div>

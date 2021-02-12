@@ -1,7 +1,10 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { ApiResponse } from 'src/app/model/ApiResponse';
 import { Drug } from 'src/app/model/Drug';
 import { DrugSearchDTO } from 'src/app/model/DrugSearchDTO';
+import { Error } from 'src/app/model/Error';
 import { DrugService } from 'src/app/services/drug-service/drug.service';
 import { PharmacyService } from 'src/app/services/pharmacy-service/pharmacy.service';
 import { UserService } from 'src/app/services/user-service/user.service';
@@ -19,9 +22,18 @@ export class DrugReservationComponent implements OnInit {
 
   drugId;
 
+  som=false;
+
   dateDiv = false;
 
-  constructor( private drugService: DrugService , private pharmacyService: PharmacyService  ) { }
+
+  searchForm = this.fb.group({
+    name :[''],
+    type : ['']
+  });
+
+
+  constructor( private fb:FormBuilder,private drugService: DrugService , private pharmacyService: PharmacyService  ) { }
 
   ngOnInit() {
 
@@ -63,9 +75,36 @@ export class DrugReservationComponent implements OnInit {
   makeReservation() {
   
       console.log(this.reservation);
-      this.drugService.makeDrugReservation(JSON.stringify(this.reservation) ).subscribe( data=> {
-        console.log(data);
+      this.drugService.makeDrugReservation(JSON.stringify(this.reservation) ).subscribe( (data:ApiResponse)=> {
+        alert(data.message)
+        window.location.reload();
+      } ,(error:Error) =>{
+        alert(error.errors);
       })
+  }
+
+
+
+  
+  search() {
+
+    let params = new HttpParams();
+    const formValue = this.searchForm.value; // this.form should be a FormGroup
+  
+
+    for (const key in formValue) {
+      if(formValue[key] !="") {
+ 
+            params = params.append(key , formValue[key]);
+        }
+    }
+    console.log(params);  
+
+    this.drugService.searchDrugs(params).subscribe( (data: Drug[] ) => {
+      this.drugs = data;
+      
+    })
+    
   }
 
 }

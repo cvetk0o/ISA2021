@@ -40,6 +40,9 @@ export class ReservationListComponent implements OnInit {
 
     this.userService.cancelReservation(reservationId).subscribe((data:ApiResponse) => {
       alert(data.message);
+      window.location.reload();
+    }, (error:Error) => {
+      alert(error.errors)
     })
   }
 
@@ -48,6 +51,10 @@ export class ReservationListComponent implements OnInit {
 
     this.userService.cancelConsulting(consultingid).subscribe( (data:ApiResponse) => {
       alert(data.message);
+      window.location.reload();
+
+    }, (error:Error) =>{
+      alert(error.errors);
     })
     
   }
@@ -55,7 +62,7 @@ export class ReservationListComponent implements OnInit {
   cancelExamination(examinationId) {
     this.userService.cancelExamination(examinationId) . subscribe((data:ApiResponse) => {
       alert(data.message);
-
+      window.location.reload();
     },(error:Error) =>{
       alert(error.errors)
     })

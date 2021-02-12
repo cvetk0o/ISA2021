@@ -9,9 +9,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
+import javax.mail.MessagingException;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +36,7 @@ import isa20.back.dto.request.LogInRequest;
 import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.request.SignUpRequest;
 import isa20.back.dto.response.ApiResponse;
+import isa20.back.email.EmailServiceImpl;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Address;
@@ -104,7 +109,8 @@ public class UserService
 	@Autowired
 	RatingRepository ratingRepo;
 	
-	
+	@Autowired
+	private EmailServiceImpl emailService;
 	
 	
 	
@@ -138,7 +144,7 @@ public class UserService
 	}
 	
 	
-	public ResponseEntity<?> updateUserInfo(SignUpRequest request) {
+	public ResponseEntity<ApiResponse> updateUserInfo(SignUpRequest request) {
 		
 		User user = userRepository.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "User not found" ) );
 		
@@ -152,7 +158,7 @@ public class UserService
 		
 		userRepository.save( user );
 		
-		return ResponseEntity.ok().body( "Successful update" );
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true, "Successfull update" ), HttpStatus.OK);
 		
 	}
 	
@@ -165,6 +171,8 @@ public class UserService
 			throw new AppException( "you dont have any reservations" );
 		
 		List<Consulting> consultings = patient.getConsultings().stream().filter( consulting -> consulting.getStatus() ==0 ).collect( Collectors.toList() );
+		
+	
 		
 		List<ConsultingDTO> zaSlanje = new ArrayList< ConsultingDTO >();
 		for(Consulting c : consultings) {
@@ -230,7 +238,7 @@ public class UserService
 		
 		Patient patient = patientRepo.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "Patient not found 1" ) );
 		
-		List<DrugReservation> reservations = patient.getDrugReservations().stream().filter( reservation -> reservation.getReservedAt().isBefore( LocalDateTime.now() ) ).collect( Collectors.toList() );
+		List<DrugReservation> reservations = patient.getDrugReservations().stream().filter( reservation -> reservation.getReservedAt().isAfter( LocalDateTime.now() ) ).collect( Collectors.toList() );
 		
 		return reservations;
 		
@@ -303,12 +311,15 @@ public class UserService
 	
 	
 	
-	public ResponseEntity< ApiResponse > makeExamReservation(Long examinationId) {
+	public ResponseEntity< ApiResponse > makeExamReservation(Long examinationId) throws MessagingException {
 		
-		
+
 			Examination exam = examRepo.findById( examinationId ).orElseThrow( () -> new ResourceNotFoundException( "Exam with this id doesn't exist" ));
 			
 			Patient patient = patientRepo.findById( getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "User with this id doesn't exist" ) );
+			
+			if(patient.getPenal() >= 3)
+				throw new ResourceNotFoundException( "You can't make reservations" );
 			
 			exam.setPatient( patient );
 			
@@ -318,6 +329,15 @@ public class UserService
 			
 			patientRepo.save(patient);
 			
+			String text= "<h1>EXAMINATION RESERVATION<h1>";
+			
+			text += "You have successfully made reservation </br>";
+			
+			text += "reserved at :" +exam.getStartTime() + " </br>";
+			text += "price: "+exam.getPrice()+"</br>";
+			
+			emailService.sendSimpleMessage( patient.getEmail(), "EXAM RESERVATION", text );
+			
 			return new ResponseEntity< ApiResponse >( new ApiResponse( true, "Reservation successfully created" ) ,  HttpStatus.OK);
 		
 	}
@@ -325,14 +345,36 @@ public class UserService
 	public List<Examination> getMyReservedExaminations() {
 		
 		List<Examination> examinations = examRepo.findByPatientId(getMyId());
-				
-		return examinations;
+		
+	//	List<Examination> exams = examinations.stream().filter( e -> e.getStartTime().isAfter( LocalDateTime.now() ) ).collect( Collectors.toList() );
+			
+		List<Examination> exams = examinations.stream().filter( e -> e.getStatus() == 1 ).collect( Collectors.toList() );
+		
+		return exams;
 	}
 	
 	
+	public List<Examination> getMyFinishedExaminations() {
+		
+		List<Examination> examinations = examRepo.findByPatientId(getMyId());
+		List<Examination> exams = examinations.stream().filter( e -> e.getStatus() == 2 ).collect( Collectors.toList() );
+		
+		return exams;
+	}
+	
 	public ResponseEntity< ApiResponse > cancelExamination(Long examinationId) {
 		
+		
 		Examination exam = examRepo.findById( examinationId ).orElseThrow( () -> new ResourceNotFoundException( "Examination with this id not found" ) );
+		
+		//proveri da li je vise od 24 casa ?
+		LocalDateTime trenutno = LocalDateTime.now();
+		
+		if(!trenutno.plusHours( 24 ).isBefore( exam.getStartTime() ) ) 
+			throw new AppException( "It's less than 24 hours before examination" );
+			
+		
+		
 		
 		exam.setPatient( null );
 		
@@ -349,7 +391,9 @@ public class UserService
 		
 		Patient patient = patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
 		
-		List< Consulting > lista =  patient.getConsultings().stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+		List< Consulting > lista1 =  patient.getConsultings().stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+		
+		List< Consulting > lista =  lista1.stream().filter( c -> c.getStartTime().isBefore( LocalDateTime.now() ) ).collect( Collectors.toList() );
 		
 		List<ConsultingDTO> zaSlanje = new ArrayList< ConsultingDTO >();
 		for(Consulting c : lista) {
@@ -464,13 +508,13 @@ public class UserService
 	public List< Dermatologist > getMyDermatologists() {
 		
 		Patient patient =  patientRepo.findById( getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id not found" ) );
-		
-		if(patient.getConsultings().isEmpty())
-			throw new ResourceNotFoundException( "No finished Examinations" );
-		
+
 		List< Examination > examinations = examRepo.findByPatientId( getMyId() );
 		
-		List< Examination > examinations1 = examinations.stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+		if(examinations.isEmpty() || examinations == null)
+			throw new ResourceNotFoundException( "You don't have history" );
+		
+		List< Examination > examinations1 = examinations.stream().filter( c -> c.getStatus() == 2 ).collect( Collectors.toList() );
 		
 		
 		//remove duplicates
@@ -559,5 +603,59 @@ public class UserService
 	}
 	
 	
+	@Scheduled(fixedRate = 2*60*60*1000)
+	public void scheduleFixedRateTask() {
+	    System.out.println(
+	      "Fixed rate task - " + System.currentTimeMillis() / 1000);
+	    
+	    List<Patient> patients = patientRepo.findAll();
+	    
+	    
+	    for(Patient patient : patients) {
+	    	if(patient.getDrugReservations() != null ) {
+	    		
+	    		if(!patient.getDrugReservations().isEmpty()) {
+		    		for(DrugReservation drugReservation : patient.getDrugReservations()) {
+		    			
+		    			if(drugReservation.getReservedAt().isBefore( LocalDateTime.now() )) {
+		    				
+		    				patient.setPenal( patient.getPenal() +1);
+		    				drugReservation.getItem().setQuantity( drugReservation.getItem().getQuantity()+1 );
+		    				
+		    				itemRepo.save( drugReservation.getItem() );
+		    				
+		    				patient.getDrugReservations().remove( drugReservation );
+		    				
+		    				patientRepo.save( patient );
+		    				
+		    				drugReservationRepo.delete( drugReservation );
+		    				
+		    				System.out.println( "odradio" );
+		    				
+		    				
+		    			}
+		    		}
+		    	}
+	    		
+	    	}
+	    	
+	    }
+	    
+	    
+	}
 	
+	
+	
+	
+	@Scheduled(cron="0 0 0 1 1/1 ?")
+	public void brisanjePenala() {
+	    
+		System.out.println( "brisanje penala" );
+		List<Patient> patients = patientRepo.findAll();
+		
+		patients.stream().forEach( p -> p.setPenal( 0 ) );
+		
+		patientRepo.saveAll( patients );
+		
+	}
 }

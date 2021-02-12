@@ -21,6 +21,7 @@ import java.awt.print.Pageable;
 import java.util.List;
 
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 
@@ -42,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-//@PreAuthorize("hasRole('PHARMACY_ADMIN')")
 @RequestMapping("/api/userController")
 public class UserController
 {
@@ -76,32 +76,33 @@ public class UserController
 	}
 	
 	@PostMapping("/user")
-	public ResponseEntity< ? > updateUserInfo(@RequestBody  @Valid final SignUpRequest request) {
+	public ResponseEntity< ? > updateUserInfo(@RequestBody  final SignUpRequest request) {
 		
 		return UserService.updateUserInfo(request);
 	}
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/getMyReservations")
 	public List< DrugReservation > getMyReservations() {
 		
 		return this.UserService.getMyReservations();
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/cancelReservation/{reservationId}")
 	public ResponseEntity< ApiResponse > cancelReservation(@PathVariable long reservationId) {
 		
 		return this.UserService.cancelReservation(reservationId);
 	}
 
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/reservedConsultings")
 	public List< ConsultingDTO > getMyConsultings() {
 		
 		return this.UserService.getMyReservedConsultings();
 	}
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/cancelConsulting/{consultingId}") 
 	public ResponseEntity< ? > cancelConsulting(@PathVariable long consultingId) {
 		
@@ -110,6 +111,7 @@ public class UserController
 		
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/updatePassword")
 	public ResponseEntity< ? > updatePassword(@RequestBody  @Valid final SignUpRequest request) {
 		
@@ -119,19 +121,22 @@ public class UserController
 		
 	}
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/examinations/reservation/{examinationId}")
-	public ResponseEntity< ? > makeExaminationReservation( @PathVariable Long examinationId) {
+	public ResponseEntity< ? > makeExaminationReservation( @PathVariable Long examinationId) throws MessagingException {
 		
 		return this.UserService.makeExamReservation(examinationId);
 	}
 
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/reservedExaminations")
 	public List<Examination> getMyReservedExaminations() {
 		
 		return this.UserService.getMyReservedExaminations();
 	}
 	
+	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/cancelExamination/{examinationId}")
 	public ResponseEntity< ApiResponse > cancelExamination(@PathVariable Long examinationId) {
 		
@@ -140,6 +145,7 @@ public class UserController
 	}
 	
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/consultings/finished")
 	public List< ConsultingDTO > getMyFinishedConsultings() {
 		
@@ -147,33 +153,46 @@ public class UserController
 	}
 	
 	
+	@PreAuthorize("hasRole('PATIENT')")
+	@GetMapping("/examinations/finished")
+	public List< Examination > getMyFinishedExaminations() {
+		
+		return UserService.getMyFinishedExaminations();
+	}
+	
+	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/getMyPharmacists")
 	public List<Pharmacist> getMyPharmacists(){
 		return this.UserService.getMyPharmacists();
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/ratePharmacist")
 	public ResponseEntity< ApiResponse > ratePharmacist(@RequestBody RatingRequest request) {
 		return this.UserService.ratePharmacist( request );
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/overrideRatePharmacist")
 	public ResponseEntity< ApiResponse > overrideRatePharmacist(@RequestBody RatingRequest request) {
 		return this.UserService.overrideRatePharmacist( request );
 	}
 	
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/getMyDermatologists")
 	public List<Dermatologist> getMyDermatologists(){
 		return this.UserService.getMyDermatologists();
 	}
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/rateDermatologist")
 	public ResponseEntity< ApiResponse > rateDerm(@RequestBody RatingRequest request) {
 		return this.UserService.rateDermatologist( request );
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/overrideRateDermatologist")
 	public ResponseEntity< ApiResponse > overrideRateDerm(@RequestBody RatingRequest request) {
 		return this.UserService.overrideRateDermatologist( request );

@@ -5,13 +5,14 @@
   <select formControlName="propertie">
     <option value="name">Name</option>
     <option value="address.city">City</option>
+    <option value="avgRate">Rating</option>
   </select>
 
   <select formControlName="order">
     <option value="asceding">Asceding</option>
     <option value="desceding">Desceding</option>
   </select>
-  <button type="submit">Submit</button>
+  <button type="submit" [disabled]="!sortForm.valid">Submit</button>
 </form>
 <H3>
   Rezultati pretrage:
@@ -22,9 +23,11 @@
         
             <div class="column">
               <div class="card">
+                <div class="pharmacyIcon"></div>
                 <h3>Apoteka {{pharmacy.name}}</h3>
                 <p>{{pharmacy.description}}</p>
                 <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
+                <p>Rating: {{pharmacy.avgRate}}</p>
                 <button (click)="goToPharmacyProfile(pharmacy.id)" > pharmacy profile</button>
               </div>
             </div>

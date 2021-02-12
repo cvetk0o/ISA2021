@@ -2,10 +2,12 @@ package isa20.back.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 import javax.mail.MessagingException;
@@ -17,7 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
+import com.querydsl.core.types.Predicate;
+
+
 import isa20.back.dto.request.DrugReservationRequest;
+import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.response.ApiResponse;
 import isa20.back.dto.response.DrugSearchDTO;
 import isa20.back.email.EmailServiceImpl;
@@ -28,11 +34,13 @@ import isa20.back.model.DrugReservation;
 import isa20.back.model.Item;
 import isa20.back.model.Patient;
 import isa20.back.model.Pharmacy;
+import isa20.back.model.Rating;
 import isa20.back.repository.DrugRepository;
 import isa20.back.repository.DrugReservationRepository;
 import isa20.back.repository.ItemRepository;
 import isa20.back.repository.PatientRepository;
 import isa20.back.repository.PharmacyRepository;
+import isa20.back.repository.RatingRepository;
 import isa20.back.repository.UserRepository;
 
 @Service
@@ -64,6 +72,10 @@ public class DrugService
 	private EmailServiceImpl emailService;
 	
 	
+	@Autowired
+	RatingRepository ratingRepo;
+	
+	
 	public ResponseEntity< List<Drug> > getAllDrugs() {
 		
 	List< Drug > drugs = drugRepo.findAll();
@@ -74,6 +86,7 @@ public class DrugService
 		return  ResponseEntity.ok().body( drugs ); 
 	}
 	
+
 	
 	
 	public List<DrugSearchDTO> getPharmacies(Long drugId) {
@@ -109,7 +122,13 @@ public class DrugService
 		
 		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( () -> new ResourceNotFoundException( "Patiend dont exists" ) );
 		
+		if(patient.getPenal() >= 3)
+			throw new ResourceNotFoundException( "You can't make reservations" );
+		
 		Item item = itemRepo.findById( request.getItemId() ).orElseThrow( () -> new ResourceNotFoundException( "item with this id dont exists" ) );
+		
+		if(item.getQuantity() == 0 )
+			throw new ResourceNotFoundException("there is not enough ");
 		
 		item.setQuantity( item.getQuantity() -1 );
 		
@@ -179,5 +198,109 @@ public class DrugService
 		return patient.getAlergies();
 	}
 	
+	
+	public List<Drug> getMyDrugs() {
+		
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ). orElseThrow( () -> new ResourceNotFoundException( "Patient with this id not found" ) );
+		
+		List<DrugReservation> reservations  = new ArrayList< DrugReservation >();
+		if(!patient.getDrugReservations().isEmpty()) {
+			
+			
+			reservations = patient.getDrugReservations().stream().filter( reservation -> reservation.getReservedAt().isBefore( LocalDateTime.now() ) ).collect( Collectors.toList() );
+			
+			
+			List<Item> unique = new ArrayList< Item >();
+			
+			for(DrugReservation p : reservations)
+				if(!unique.contains( p.getItem() ))
+					unique.add( p.getItem() );
+			
+			
+			List<Drug> drugs = new ArrayList< Drug >();
+			
+			for(Item i : unique)
+				if(!drugs.contains( i.getDrug() ))
+						drugs.add( i.getDrug() );
+			
+			
+			return drugs;
+		}
+		
+		
+		throw new ResourceNotFoundException( "You didn't had any drug reservations" );
+		
+	}
+	
+	public ResponseEntity< ApiResponse > rateDrug(RatingRequest request) {
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient not found" ) );
+		
+		Drug drug  = drugRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Drug not found" ) );
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		
+		
+		if(drug.getRatings().isEmpty() || ratings.isEmpty()) {
+			Rating newRate = new Rating(request.getRating() , patient);
+			
+			drug.getRatings().add( newRate );
+			
+			ratingRepo.save( newRate );
+			drug.calculateAvg();
+			drugRepo.save( drug);
+			
+			return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated drug" ),HttpStatus.OK);
+			
+		}
+		
+		for(Rating r : ratings) 
+			if(drug.getRatings().contains( r ))
+				throw new ResourceNotFoundException( "You have already rated this drug" );
+		
+		Rating newRate = new Rating(request.getRating() , patient);
+		
+		drug.getRatings().add( newRate );
+		
+		ratingRepo.save( newRate );
+		
+		
+		drug.calculateAvg();
+		drugRepo.save(drug);
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully rated drug" ),HttpStatus.OK);
+		
+		
+	}
+	
+public ResponseEntity< ApiResponse > overrideRateDrug(RatingRequest request) {
+		
+		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient not found" ) );
+		
+		Drug drug  = drugRepo.findById( request.getId() ).orElseThrow( ()-> new ResourceNotFoundException( "Drug not found" ) );
+		
+		List< Rating  > ratings = ratingRepo.findByPatientId( patient.getId() );
+		
+		for(Rating r : ratings) 
+			if(drug.getRatings().contains( r )) {
+				r.setGrade( request.getRating() );
+				r.setVotedAt( LocalDateTime.now() );
+				
+				ratingRepo.save( r );
+				drug.getRatings().set( drug.getRatings().indexOf( r ), r );
+				
+				drug.calculateAvg();
+				drugRepo.save( drug);
+				break;
+			}
+		
+		return new ResponseEntity< ApiResponse >(new ApiResponse( true,"You successfully submited new grade for drug" ),HttpStatus.OK);
+		
+	}
+	
+	
+		
 	
 }

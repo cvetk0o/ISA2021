@@ -5,6 +5,7 @@ import java.util.Set;
 
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -20,7 +21,9 @@ import lombok.Setter;
 public class Patient extends User
 {
 
-	@OneToMany
+	private int penal;
+	
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name= "patientId")
 	private List< DrugReservation > drugReservations;
 	

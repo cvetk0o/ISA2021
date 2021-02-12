@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user-service/user.service';
 })
 export class UpdateUserInfoComponent implements OnInit {
 
+  penalties;
   
   updateForm = this.fb.group({
     name: ['', Validators.required],
@@ -33,6 +34,7 @@ export class UpdateUserInfoComponent implements OnInit {
   ngOnInit() {
     this.userService.getMyInfo().subscribe( (data:User) => {
       console.log(data);
+      this.penalties = data.penal;
       this.updateForm.patchValue( {
         name : data.name,
         lastname : data.lastname,
@@ -52,8 +54,9 @@ export class UpdateUserInfoComponent implements OnInit {
 
     console.log(this.updateForm);
     
-      this.userService.updateMyInfo(this.updateForm.value). subscribe( data => {
-        console.log(data);
+      this.userService.updateMyInfo(this.updateForm.value). subscribe( (data:ApiResponse) => {
+        alert(data.message);
+        window.location.reload();
       })
   }
 

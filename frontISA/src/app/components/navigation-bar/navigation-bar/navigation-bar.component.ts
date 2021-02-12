@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JWToken } from 'src/app/model/JWToken';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 
 @Component({
@@ -9,6 +10,7 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
 })
 export class NavigationBarComponent implements OnInit {
 
+  patientDiv = false;
   constructor(private authService: AuthService,
               private router: Router
     
@@ -32,10 +34,10 @@ export class NavigationBarComponent implements OnInit {
     
     if( this.authService.currentUserValue != null ) {
           switch (this.authService.currentUserValue.role) {
-            case "PATIENT":
+            case "ROLE_PATIENT":
             this.router.navigate(["/patientHomePage"]);
               break;
-          case "PHARMACY_ADMIN":
+          case "ROLE_PHARMACY_ADMIN":
             this.router.navigate(["/pharmacyAdminHomePage"]);
               break;
           default:
@@ -45,5 +47,14 @@ export class NavigationBarComponent implements OnInit {
     } else {
       this.router.navigate(["/"])
     }
+}
+
+
+patient() {
+  var nesto : JWToken = this.authService.currentUserValue;
+
+  return nesto.role ==="ROLE_PATIENT";
+  
+  
 }
 }

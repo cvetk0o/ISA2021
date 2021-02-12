@@ -41,5 +41,23 @@ export class DrugService {
     return this.http.get(`${this.restUrl}drugs/alergies`)
   }
 
+  rateDrug(data) {
+    return this.http.post(`${this.restUrl}rateDrug` , data);
+  }
+
+  overrideRateDrug(data) {
+    return this.http.post(`${this.restUrl}overrideRateDrug` , data);
+  }
+
+  getMyDrugs() {
+    return this.http.get(`${this.restUrl}getMyDrugs`);
+  }
+
+  
+  searchDrugs(params) {
+    
+    return this.http.get(`${this.restUrl}searchDrugs/?${params}` );
+
+  }
 
 }

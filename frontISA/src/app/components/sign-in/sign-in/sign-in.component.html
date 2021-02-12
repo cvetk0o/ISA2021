@@ -1,8 +1,7 @@
-<p>
-  sign-in works!
-</p>
+<div class="mainContainer">
 
 
+<div id="formContainer">
 
 <form [formGroup]="signInForm" (submit) ="signIn()">
   <label for="email">Email</label>
@@ -16,3 +15,8 @@
 
   <button type="submit" [disabled] = "!signInForm.valid">Submit</button>
 </form>
+
+</div>
+
+
+</div>

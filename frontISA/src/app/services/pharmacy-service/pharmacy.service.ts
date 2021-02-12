@@ -57,4 +57,18 @@ export class PharmacyService {
    return this.http.get(`${this.restUrl}getMyPharmacies`);
  }
 
+ ratePharmacy(data) {
+  return this.http.post(`${this.restUrl}ratePharmacy` , data);
 }
+
+overrideRatePharmacy(data) {
+  return this.http.post(`${this.restUrl}overrideRatePharmacy` , data);
+}
+
+
+
+
+}
+
+
+

@@ -1,4 +1,9 @@
+<div class="mainContainer">
+  <div id="pictureContainer" >
+    
+  </div>
 
+<div id="formContainer">
 <form [formGroup]="signUpForm" (submit)="signUp()">
   <label for="name">Name</label>
   <input formControlName="name" id="name" />
@@ -50,3 +55,6 @@
 
   <button type="submit" [disabled]="!signUpForm.valid">Submit</button>
 </form>
+</div>
+
+</div>

@@ -1,8 +1,7 @@
-<p>
-  update-user-info works!
-</p>
+
 <div class="row">
   <div class="column">
+    <h3> UPDATE PERSONAL DATA :</h3>
 
 <form [formGroup]="updateForm" (submit)="update()">
   <label for="name">Name</label>
@@ -47,7 +46,7 @@
 </div>
 <div class="column">
 
-  ZA SIFRU
+ <h3> UPDATE PASSWORD :</h3>
 <form [formGroup]="passwordForm" (submit)="updatePassword()">
   <label for="Password">Password</label>
   <input formControlName="password1" id="password1"  type="password"/>
@@ -59,6 +58,11 @@
 
   <button type="submit" [disabled]="!passwordForm.valid">Submit</button>
 </form>
+</div>
+
+<div class="column">
+
+  <h3>NUMBER OF PENALTIES:   {{penalties}}</h3>
 </div>
 
 </div>

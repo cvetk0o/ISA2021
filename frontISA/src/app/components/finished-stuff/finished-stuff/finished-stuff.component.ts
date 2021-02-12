@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Consulting } from 'src/app/model/Consulting';
+import { Examination } from 'src/app/model/Examination';
 import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class FinishedStuffComponent implements OnInit {
   });
 
   finishedConsultings: Consulting[];
+  finishedExaminations: Examination[];
 
   ratingConsulting = false;
 
@@ -32,7 +34,11 @@ export class FinishedStuffComponent implements OnInit {
       this.finishedConsultings = data;
     })
 
-    document.getElementById("myModal").style.display="none";
+    this.userService.getFinishedExaminations() .subscribe( (data: Examination[]) =>{
+      this.finishedExaminations = data;
+
+    } )
+    
      
   }
 

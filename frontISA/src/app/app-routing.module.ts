@@ -12,6 +12,8 @@ import { ConsultingReservationComponent } from './components/consulting-reservat
 import { PharmacyListComponent } from './components/pharmacy-list/pharmacy-list/pharmacy-list.component';
 import { PharmacyProfileComponent } from './components/pharmacy-profile/pharmacy-profile/pharmacy-profile.component';
 import { RatingPageComponent } from './components/rating-page/rating-page/rating-page.component';
+import { ReservationListComponent } from './components/reservation-list/reservation-list/reservation-list.component';
+import { FinishedStuffComponent } from './components/finished-stuff/finished-stuff/finished-stuff.component';
 
 
 const routes: Routes = [
@@ -21,12 +23,14 @@ const routes: Routes = [
   { path: 'pharmacyAdminHomePage' , component: PharmacyAdminHomePageComponent, canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PHARMACY_ADMIN']} },
   { path: 'signUp' , component: SignupComponent },
   { path : 'signIn' , component: SignInComponent},
+  { path: 'reservationList' , component: ReservationListComponent , canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PATIENT']}},
+  { path: 'finishedStuff' , component: FinishedStuffComponent , canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PATIENT']}},
   { path: 'activationPage/:id' , component: ActivateUserComponent},
-  { path: 'drugReservation' , component: DrugReservationComponent},
-  { path: 'consultingReservation' , component: ConsultingReservationComponent},
+  { path: 'drugReservation' , component: DrugReservationComponent, canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PATIENT']}},
+  { path: 'consultingReservation' , component: ConsultingReservationComponent ,canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PATIENT']}},
   { path: 'pharmacyList' , component: PharmacyListComponent},
   { path: 'pharmacyProfile/:id' ,component: PharmacyProfileComponent},
-  { path: 'ratingPage' ,component: RatingPageComponent},
+  { path: 'ratingPage' ,component: RatingPageComponent  , canActivate: [AuthGuard] , data: { roles: [ 'ROLE_PATIENT']}},
   { path: '**', redirectTo: '' }
 ];
 

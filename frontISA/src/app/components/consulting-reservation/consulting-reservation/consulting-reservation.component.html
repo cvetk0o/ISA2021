@@ -1,15 +1,20 @@
+
+<div class="kolona1">
 <div>
 <h3>Izaberite zeljeni datum savetovanja</h3>
-  <input [formControl]="dateControl" type="date"  min="2018-01-01" max="2028-12-31"  (ngModelChange)="valuechangeDate($event)">
+  <input [formControl]="dateControl" type="date"  min="2018-01-01" max="2028-12-31"  (ngModelChange)="valuechangeDate($event)"  style="width: 80%;">
 
   <h3>Izaberite vreme pocetka savetovanja</h3>
 <input type="time" id="appt" name="appt" [formControl]="timeControl" (ngModelChange)="valuechange($event)"
-       min="09:00" max="18:00" required>
+       min="09:00" max="18:00" required  style="width: 80%;">
 
-  <button (click)="prvoFiltriranje()">Prvi search</button>
+  <button (click)="prvoFiltriranje()">Search</button>
 
 
 </div>
+</div>
+
+<div class="kolona2">
 
 <div  *ngIf="pharmacyDiv">
   <H3>
@@ -21,26 +26,29 @@
       <form [formGroup]="sortForm" (submit) = "sortPharmacies()">
         <select formControlName="propertie">
           <option value="consultingPrice">Price</option>
-          <option value="rating">Rating</option>
+          <option value="avgRate">Rating</option>
         </select>
 
         <select formControlName="order">
           <option value="ascending">Asceding</option>
           <option value="desceding">Desceding</option>
         </select>
-        <button type="submit">Submit</button>
+        <button type="submit" [disabled]="!sortForm.valid">Submit</button>
       </form>
   </div>
   <div class="row">
         <ul>
           <li *ngFor="let pharmacy of availablePharmacies "> 
           
-              <div class="column" >
+              <div style=" 
+              width: 80%;
+              padding: 0 10px 10px;">
                 <div class="card">
+                <div class="pharmacyIcon"></div>
                   <h3> Apoteka : {{pharmacy.name}}</h3>
                   <p>Cena savetovanja : {{pharmacy.consultingPrice}}</p>
                   <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
-                  <p></p>
+                  <p>Rating: {{pharmacy.avgRate}}</p>
                   <button (click)="showPharmacists(pharmacy.id)">Prikazi farmaceute</button>
                 </div>
               </div>
@@ -52,20 +60,36 @@
   </div>
 
 </div>
+</div>
 
+<div class="kolona3">
 
 <div *ngIf="pharmacistDiv">
   <H3>
     Slobodni farmaceuti
    </H3>
+
+   <label>Sort by pharmacist rating:</label>
+   <form [formGroup]="sortPharmacistForm" (submit) = "sortPharmacists()">
+
+
+     <select formControlName="order">
+       <option value="ascending">Asceding</option>
+       <option value="desceding">Desceding</option>
+     </select>
+     <button type="submit" [disabled]="!sortPharmacistForm.valid">Submit</button>
+   </form>
    <div class="row">
          <ul>
            <li *ngFor="let pharmacist of availablePharmacists "> 
            
-               <div class="column" >
+               <div style=" 
+               width: 80%;
+               padding: 0 10px 10px;" >
                  <div class="card">
+                   <div class="examIcon"></div>
                    <h3> Apotekar : {{pharmacist.name}}  {{pharmacist.lastname}}</h3>
-                   <p>Ocena: </p>
+                   <p>Ocena:{{pharmacist.avgRate}} </p>
                    <p></p>
                    <button (click)="makeReservation(pharmacist.id)">Zakazi pregled</button>
                  </div>
@@ -76,4 +100,5 @@
    
        </ul>
    </div>
+</div>
 </div>

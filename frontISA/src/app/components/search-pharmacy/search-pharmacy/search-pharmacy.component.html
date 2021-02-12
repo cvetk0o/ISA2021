@@ -1,36 +1,51 @@
-<p>
-  search-pharmacy works!
-</p>
 
-
-
+<div class="column1">
 <form [formGroup]="searchForm" (submit) ="search()">
-  <div class="row"> <div class="column">
+  <div class="row">
 
   <label for="name">Name</label>
   <input formControlName="name" id="name" />
 
-
-
+ 
   <label for="city">City</label>
   <input formControlName="city" id="city"  type="city"/>
-  
-</div></div>
+
+<div class="column">
   <button type="submit" >Submit</button>
+</div>
+
+</div>
 </form>
 
 <H3>
   Rezultati pretrage:
 </H3>
+filter by:
+
+rate:
+<select [formControl]="rate">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+<button (click) ="filterPharms()">Filter</button>
+
+</div>
+<div class="column2">
+
 <div class="row">
       <ul>
         <li *ngFor="let pharmacy of pharmacies "> 
         
             <div class="column">
               <div class="card">
+                <div class="pharmacyIcon"></div>
                 <h3>Apoteka {{pharmacy.name}}</h3>
                 <p>{{pharmacy.description}}</p>
                 <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
+                <p>Rating : {{pharmacy.avgRate}}</p>
               </div>
             </div>
       
@@ -38,4 +53,7 @@
       </li>
 
     </ul>
+</div>
+
+
 </div>

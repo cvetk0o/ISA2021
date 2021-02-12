@@ -1,0 +1,29 @@
+
+/* Create two equal columns that floats next to each other */
+.kolona1 {
+    float: left;
+    width: 33%;
+    padding: 10px;
+   
+    height: 1080px;
+  
+  }
+  
+  .kolona2 {
+    float: left;
+    width: 33%;
+    padding: 10px;
+  }
+  
+  .kolona3 {
+    float: left;
+    width: 33%;
+    padding: 10px;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }

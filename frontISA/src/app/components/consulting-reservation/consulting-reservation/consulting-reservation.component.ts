@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ApiResponse } from 'src/app/model/ApiResponse';
 import { Error } from 'src/app/model/Error';
 import { Pharmacy } from 'src/app/model/Pharmacy';
 import { User } from 'src/app/model/User';
@@ -24,6 +25,11 @@ export class ConsultingReservationComponent implements OnInit {
 
   sortForm = this.fb.group({
     propertie: ['',Validators.required],
+    order: ['' ,Validators.required]
+  });
+
+  sortPharmacistForm = this.fb.group({
+    propertie: [''],
     order: ['' ,Validators.required]
   });
   
@@ -71,10 +77,13 @@ export class ConsultingReservationComponent implements OnInit {
 
   makeReservation( pharmacistId) {
     this.reservation.pharmacistId = pharmacistId;
-    this.pharmacyService.makeReservation(this.reservation).subscribe( data => {
-      console.log(data);
+    this.pharmacyService.makeReservation(this.reservation).subscribe( (data:ApiResponse) => {
+      alert(data.message)
       
-    })
+    },(error:Error) =>{
+      alert(error.errors);
+    }
+    )
   }
 
 
@@ -90,6 +99,16 @@ export class ConsultingReservationComponent implements OnInit {
       alert(error.message);
     })
     
+  }
+
+  sortPharmacists() {
+     if(this.sortPharmacistForm.get("order").value === "ascending"){
+    this.availablePharmacists= this.availablePharmacists.sort((p,q)=> (p.avgRate > q.avgRate) ? 1 : -1 )
+     }else {
+      this.availablePharmacists= this.availablePharmacists.sort((p,q)=> (p.avgRate > q.avgRate) ? -1 : 1 )
+     }
+  console.log(this.availablePharmacists);
+  
   }
 
 }

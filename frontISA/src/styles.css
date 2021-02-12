@@ -59,7 +59,10 @@ html {
   }/* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url("images/Healthcare-Background-Image.jpg");
+
+}
 
 
 * {
@@ -74,7 +77,8 @@ body {
 .column {
   float: left;
   width: 25%;
-  padding: 0 10px;
+  padding: 0 10px 10px;
+  
 }
 
 /* Remove extra left and right margins, due to padding */
@@ -101,13 +105,104 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
   text-align: center;
-  background-color: #f1f1f1;
+  background-color: #80FFDB;
+  border-radius: 25px;
+  box-shadow: -14px 10px 10px #888888;
 }
 
 input {
   size: 300px;
 }
 
+ul{list-style-type: none;}
 
 
 /* ###########################################   */
+
+
+.drugIcon {
+  background-image: url("images/drug.png");
+  background-color: ;
+  height: 50px;
+  width: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}
+
+.examIcon {
+  background-image: url("images/exam.png");
+  background-color: ;
+  height: 50px;
+  width: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}
+
+.consultingIcon {
+  background-image: url("images/consulting.png");
+  background-color: ;
+  height: 50px;
+  width: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}
+
+
+.pharmacyIcon {
+  background-image: url("images/pharmacyIcon.png");
+  background-color: ;
+  height: 50px;
+  width: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}
+
+
+.starsIcon {
+  background-image: url("images/star-rating.jpg");
+  background-color: ;
+  height: 400px;
+  width: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}
+
+#pictureContainer {
+
+}
+
+
+
+
+/* Create two equal columns that floats next to each other */
+.column1 {
+  float: left;
+  width: 10%;
+  padding: 10px;
+  background-color:rgba(	240,	248,	255, 0.5);
+  height: 1080px;
+
+}
+
+.column2 {
+  float: left;
+  width: 90%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

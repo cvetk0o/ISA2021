@@ -54,7 +54,9 @@ public class DrugReservation
 		this.createdAt = LocalDateTime.now();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
+		
+		request.setReservedAt( request.getReservedAt() + " 23:59" );
+		
 		this.reservedAt = LocalDateTime.parse(request.getReservedAt(), formatter);
 		
 		

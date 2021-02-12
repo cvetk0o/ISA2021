@@ -19,6 +19,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.StringPath;
 
 
+import isa20.back.model.Dermatologist;
 import isa20.back.model.Item;
 import isa20.back.model.Pharmacist;
 import isa20.back.model.Pharmacy;
@@ -31,6 +32,8 @@ public interface PharmacyRepository extends JpaRepository< Pharmacy, Long>, Quer
 		Pharmacy  findByItemList(Item item);
 		
 		List<Pharmacy> findAllByPharmacistsIn(List<Pharmacist> lista);
+		
+		List<Pharmacy> findAllByDermatologistsIn(List<Dermatologist> lista);
 		
 		Optional< Pharmacy > findByPharmacists(Pharmacist pharm);
 		

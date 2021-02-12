@@ -60,6 +60,11 @@ export class UserService {
     return this.http.get(`${this.restUrl}consultings/finished`);
   }
 
+  getFinishedExaminations() {
+    return this.http.get(`${this.restUrl}examinations/finished`);
+  }
+
+
 
     rateConsulting(data,consultingId) {
       return this.http.post(`${this.restUrl}consultings/rate/${consultingId}` , data);

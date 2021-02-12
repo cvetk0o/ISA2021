@@ -1,0 +1,22 @@
+.mainContainer {
+    width: 700px;
+    margin: auto;
+    margin-top: 8%;
+    background-color: aquamarine;
+    position: relative;
+    background-image: url("/src/images/drugsSignUp.jpg");
+    box-shadow: -20px 15px 10px #888888;
+}
+
+
+#pictureContainer, #formContainer {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 50%;
+    height: 100%;
+}
+
+
+#formContainer {
+    background-color: #80FFDB;
+}

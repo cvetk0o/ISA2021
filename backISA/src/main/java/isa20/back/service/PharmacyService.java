@@ -11,6 +11,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
+import javax.mail.MessagingException;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,6 +30,7 @@ import com.querydsl.core.types.Predicate;
 import isa20.back.dto.request.ConsultingReservationRequest;
 import isa20.back.dto.request.RatingRequest;
 import isa20.back.dto.response.ApiResponse;
+import isa20.back.email.EmailServiceImpl;
 import isa20.back.exception.AppException;
 import isa20.back.exception.ResourceNotFoundException;
 import isa20.back.model.Consulting;
@@ -83,6 +87,11 @@ public class PharmacyService
 	
 	@Autowired
 	RatingRepository ratingRepo;
+	
+	@Autowired
+	private EmailServiceImpl emailService;
+	
+	
 	
 	
 	public ResponseEntity< List<Pharmacy> > getAllPharmacies() {
@@ -219,8 +228,15 @@ public class PharmacyService
 		
 			
 		List<Pharmacy> apoteke = pharmacyRepo.findAllByPharmacistsIn( lista );
+		
+		
+		List<Pharmacy> zaVracanje = new ArrayList< Pharmacy >();
+		
+		for(Pharmacy p : apoteke)
+			if(!zaVracanje.contains( p ))
+				zaVracanje.add( p );
 				
-		return apoteke;
+		return zaVracanje;
 		
 		
 	}
@@ -300,13 +316,17 @@ public class PharmacyService
 	}
 		
 	
-	public ResponseEntity< ApiResponse > makeReservation( ConsultingReservationRequest request) {
+	public ResponseEntity< ApiResponse > makeReservation( ConsultingReservationRequest request) throws MessagingException {
 		
 		// vidi kako to sve povezati da li nam treba rezervacija da li nam treba samo savetovanje;
 		
 		Consulting consulting = new Consulting(request.getVreme() , request.getVreme().plusMinutes( 20 ));
 		
 		Patient patient = patientRepo.findById( userService.getMyId() ).orElseThrow( ()-> new ResourceNotFoundException( "Patient with this id doesnt exist" ) );
+		
+		if(patient.getPenal() >= 3)
+			throw new ResourceNotFoundException( "You can't make reservations" );
+		
 		
 		Pharmacist pharmacist = pharmacistRepo.findById( request.getPharmacistId() ). orElseThrow( ()-> new ResourceNotFoundException( "Pharmacist with this id doesnt exist" ) );
 		
@@ -319,6 +339,16 @@ public class PharmacyService
 		patientRepo.save( patient );
 		
 		pharmacistRepo.save( pharmacist );
+		
+		
+		String text= "<h1>CONSULTING RESERVATION<h1>";
+		
+		text += "You have successfully made reservation </br>";
+		
+		text += "reserved at :" +consulting.getStartTime() + " </br>";
+		
+		
+		emailService.sendSimpleMessage( patient.getEmail(), "CONSULTING RESERVATION", text );
 		
 		return new ResponseEntity< ApiResponse >( new ApiResponse( true, "Reservation made" ) , HttpStatus.OK);
 		
@@ -389,6 +419,57 @@ public class PharmacyService
 		for(Pharmacy p : pharmacies)
 			if(!unique.contains( p ))
 				unique.add( p );
+		
+		
+		
+		
+		if(!patient.getConsultings().isEmpty()) {
+			
+			
+			List< Consulting > consultings = patient.getConsultings().stream().filter( c -> c.getStatus() == 1 ).collect( Collectors.toList() );
+			
+			List<Pharmacist> pharmacists = pharmacistRepo.findByConsultingsIdIn( consultings.stream().map(Consulting::getId).collect( Collectors.toList() ) );
+			
+			//remove duplicates
+			List< Pharmacist > uniquePharmacists = new ArrayList< Pharmacist >();
+			for(Pharmacist c : pharmacists)
+				if(!uniquePharmacists.contains( c ))
+					uniquePharmacists.add( c );
+			
+			
+			List< Pharmacy > pharm1 = pharmacyRepo.findAllByPharmacistsIn( uniquePharmacists );
+			
+			for(Pharmacy p : pharm1)
+				if(!unique.contains( p ))
+					unique.add( p );
+			
+		}
+			
+		
+
+		
+		List< Examination > examinations = examinationRepo.findByPatientId( userService.getMyId() );
+		
+		if(!examinations.isEmpty() || examinations != null)
+		{
+		
+		List< Examination > examinations1 = examinations.stream().filter( c -> c.getStatus() == 2 ).collect( Collectors.toList() );
+		
+		
+		//remove duplicates
+		List< Dermatologist> uniqueDerm = new ArrayList< Dermatologist >();
+		for(Examination e : examinations1 )
+			if(!uniqueDerm.contains( e.getDermatologist() ))
+				uniqueDerm.add( e.getDermatologist() );
+		
+		
+		List<Pharmacy> pharms = pharmacyRepo.findAllByDermatologistsIn( uniqueDerm );
+				
+		for(Pharmacy p : pharms)
+			if(!unique.contains( p ))
+				unique.add( p );
+		
+		}
 		
 		
 		return unique;

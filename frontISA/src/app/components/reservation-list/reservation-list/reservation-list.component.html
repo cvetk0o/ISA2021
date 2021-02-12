@@ -1,33 +1,34 @@
-<p>
-  reservation-list works!
-</p>
 
-
+<div class="kolona1">
 <H3>
   Moje rezervacije
 </H3>
+
 <div class="row">
       <ul>
         <li *ngFor="let reservation of reservations "> 
-        
-            <div class="column" >
+          <div style="  width: 80%;
+          padding: 0 10px 10px;">
+            
               <div class="card">
+                <div class="drugIcon"></div>
                 <h3> reservisani lek : {{reservation.item.drug.name}}</h3>
                 <p> datum rezervacije: {{reservation.reservedAt}}</p>
                 <p></p>
                 <button (click)="otkazi(reservation.id)">Otkazi rezervaciju</button>
               </div>
-            </div>
-      
+           
+          </div>
       
       </li>
 
     </ul>
 </div>
 
+</div>
 
 
-
+<div class="kolona2">
 <H3>
   Zakazana savetovanja
 </H3>
@@ -35,10 +36,12 @@
       <ul>
         <li *ngFor="let consulting of reservedConsultings "> 
         
-            <div class="column" >
-              <div class="card">
+           <div style="  width: 80%;
+           padding: 0 10px 10px;">
+              <div class="card" >
+                <div class="consultingIcon"></div>
                 <h3> ID SAVETOVANJA : {{consulting.id}}</h3>
-                <p>  farmaceut : {{consulting.pharmacist.name}}</p>
+                <p>  farmaceut : {{consulting.pharmacist.name}} {{consulting.pharmacist.lastname}}</p>
                 <p> apoteka : {{consulting.pharmacy}}</p>
                 <p> pocetak: {{consulting.startTime  | date:'shortTime'}}</p>
                 <p> kraj: {{consulting.endTime | date:'shortTime'}}</p>
@@ -54,7 +57,10 @@
     </ul>
 </div>
 
+</div>
 
+
+<div class="kolona3">
 
 <H3>
   Reserved examinations
@@ -63,20 +69,24 @@
       <ul>
         <li *ngFor="let examination of reservedExaminations "> 
         
-            <div class="column" >
+          <div style="  width: 80%;
+          padding: 0 10px 10px;">
               <div class="card">
+                <div class="examIcon"></div>
                 <h3> ID examination : {{examination.id}}</h3>
-                <p>  Dermatologist : {{examination.dermatologist.name}}</p>
+                <p>  Dermatologist : {{examination.dermatologist.name}} {{examination.dermatologist.lastname}}</p>
                 <p> pocetak: {{examination.startTime  | date:'shortTime'}}</p>
                 <p> kraj: {{examination.endTime | date:'shortTime'}}</p>
                 <p> datum: {{examination.startTime| date}}</p>
                 <p></p>
                 <button (click)="cancelExamination(examination.id)">Cancel examination</button>
               </div>
-            </div>
+          </div>
       
       
       </li>
 
     </ul>
+</div>
+
 </div>

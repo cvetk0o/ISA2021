@@ -1,13 +1,19 @@
 
+<div style=" float: left;
+width: 50%;
+padding: 10px;" >
+
 <H3>
  Double click to add to alergie list
 </H3>
 <div class="row">
-      <ul>
+      <ul style="overflow-y:scroll;">
         <li *ngFor="let drug of drugs "> 
         
-            <div class="column" (dblclick)="selectedDrug(drug.id)">
+            <div style="  width: 50%;
+            padding: 0 10px 10px;" (dblclick)="selectedDrug(drug.id)">
               <div class="card">
+                <div class="drugIcon"></div>
                 <h3> Name: {{drug.name}}</h3>
                 <p>Type: {{drug.type}}</p>
                 <p>Specification: {{drug.specification}}</p>
@@ -20,16 +26,23 @@
     </ul>
 </div>
 
+</div>
 
+
+<div style=" float: left;
+width: 50%;
+padding: 10px;" >
 <H3>
   I am alergic on:          (double click od drug to remove it from list)
 </H3>
 <div class="row">
-      <ul>
+      <ul style="overflow-y:scroll;">
         <li *ngFor="let drug of drugsAlergie "> 
         
-            <div class="column" (dblclick)="removeDrug(drug.id)">
+            <div style="  width: 50%;
+            padding: 0 10px 10px;" (dblclick)="removeDrug(drug.id)">
               <div class="card">
+                <div class="drugIcon"></div>
                 <h3> Name: {{drug.name}}</h3>
                 <p>Type: {{drug.type}}</p>
                 <p>Specification: {{drug.specification}}</p>
@@ -40,4 +53,5 @@
       </li>
 
     </ul>
+</div>
 </div>

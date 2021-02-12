@@ -1,14 +1,24 @@
 <div>
  
   <ul>
-    <li class="header">  Naziv sajta </li>
+    <li  ><a href="">Pharmacy system</a></li>
     <li (click) = "checkHome()"><a>Home</a></li>
     <li *ngIf="!signedIn()"><a href="signIn">SignIn</a></li>
     <li *ngIf="!signedIn()"><a href="signUp">SignUp</a></li>
-  
-      
     
+   <div *ngIf="patient()">
+    <li><a href="reservationList">My reservations</a></li>
+    <li><a href="finishedStuff">Reservation history</a></li>
+    <li><a  href="pharmacyList">Pharmacy list </a></li>
+    <li><a  href="drugReservation">New Drug Reservation </a></li>
+    <li><a  href="consultingReservation">New consulting reservation</a></li>
+    
+    <li><a  href="ratingPage">Rating page</a></li>
+    
+    </div>
+
 
     <li *ngIf="signedIn()" (click) ="logout()"><a href="">LogOut</a></li>
+    
   </ul>
 </div>
