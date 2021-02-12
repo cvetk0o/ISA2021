@@ -11,6 +11,8 @@ MySQL
 
 Hibernate
 
+Lombok
+
 
 ## To run backend application use Maven.
 
