@@ -14,6 +14,10 @@ Hibernate
 
 ## To run backend application use Maven.
 
+koristeni SUBP je MySQL
+
+treba promeniti korisnicko ime i sifru za bazu podatak u application.properties fajlu
+
 ukoliko se koristi eclipse razvojno okruzenje pokrenuti projekat kao Spring Boot projekat
 
 ## To run frontetn application use NPM
