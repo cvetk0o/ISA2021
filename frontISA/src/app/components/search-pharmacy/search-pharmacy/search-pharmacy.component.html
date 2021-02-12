@@ -10,6 +10,13 @@
   <label for="city">City</label>
   <input formControlName="city" id="city"  type="city"/>
 
+  <label for="city">Consulting price From</label>
+  <input formControlName="consultingPriceFrom" id="city"  type="city"/>
+  
+  <label for="city">Consulting price To</label>
+  <input formControlName="consultingPriceTo" id="city"  type="city"/>
+
+
 <div class="column">
   <button type="submit" >Submit</button>
 </div>
@@ -47,6 +54,7 @@ rate:
                 <p>{{pharmacy.description}}</p>
                 <p>Adress: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
                 <p>Rating : {{pharmacy.avgRate}}</p>
+                {{pharmacy.consultingPrice}}
               </div>
             </div>
       

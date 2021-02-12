@@ -1,6 +1,7 @@
 package isa20.back.repository;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -54,7 +55,23 @@ public interface PharmacyRepository extends JpaRepository< Pharmacy, Long>, Quer
 		            return Optional.of(predicate);
 		        }
 		    });
+		 
+		 
+	        // Make a kind of 'between' filter for Person.age property
+	        bindings.bind(root.consultingPrice).all((path, value) -> {
+	            Iterator<? extends Long> it = value.iterator();
+	            Long from = it.next();
+	            if (value.size() >= 2) {
+	            	System.out.println( "DVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" );
+	                Long to = it.next();
+	                return Optional.of(path.between(from, to));
+	            } else {
+	            	
+	                return Optional.of(path.goe(from));
+	            }
+	        });
 
+	
 		 
 		 
 	 }
