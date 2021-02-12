@@ -13,8 +13,8 @@ import { PharmacyService } from 'src/app/services/pharmacy-service/pharmacy.serv
 })
 export class ConsultingReservationComponent implements OnInit {
   reservation: any = {};
-  dateControl = new FormControl(new Date);
-  timeControl = new FormControl(new Date);
+  dateControl = new FormControl(new Date , Validators.required);
+  timeControl = new FormControl(new Date , Validators.required);
 
   availablePharmacies: Pharmacy[];
   availablePharmacists: User[];

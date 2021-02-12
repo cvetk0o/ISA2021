@@ -1,7 +1,7 @@
 
 <div class="kolona1">
 <H3>
-  Moje rezervacije
+  Drug reservations
 </H3>
 
 <div class="row">
@@ -12,8 +12,8 @@
             
               <div class="card">
                 <div class="drugIcon"></div>
-                <h3> reservisani lek : {{reservation.item.drug.name}}</h3>
-                <p> datum rezervacije: {{reservation.reservedAt}}</p>
+                <h3> Reserved drug : {{reservation.item.drug.name}}</h3>
+                <p> date of reservation: {{reservation.reservedAt}}</p>
                 <p></p>
                 <button (click)="otkazi(reservation.id)">Otkazi rezervaciju</button>
               </div>
@@ -30,7 +30,7 @@
 
 <div class="kolona2">
 <H3>
-  Zakazana savetovanja
+  Reserved consultings
 </H3>
 <div class="row">
       <ul>
@@ -40,12 +40,12 @@
            padding: 0 10px 10px;">
               <div class="card" >
                 <div class="consultingIcon"></div>
-                <h3> ID SAVETOVANJA : {{consulting.id}}</h3>
-                <p>  farmaceut : {{consulting.pharmacist.name}} {{consulting.pharmacist.lastname}}</p>
-                <p> apoteka : {{consulting.pharmacy}}</p>
-                <p> pocetak: {{consulting.startTime  | date:'shortTime'}}</p>
-                <p> kraj: {{consulting.endTime | date:'shortTime'}}</p>
-                <p> datum: {{consulting.date | date}}</p>
+                <h3> CONSULTING ID: {{consulting.id}}</h3>
+                <p>  Pharmacist : {{consulting.pharmacist.name}} {{consulting.pharmacist.lastname}}</p>
+                <p> Pharmacy : {{consulting.pharmacy}}</p>
+                <p> Start time : {{consulting.startTime  | date:'shortTime'}}</p>
+                <p> End time: {{consulting.endTime | date:'shortTime'}}</p>
+                <p> Date : {{consulting.date | date}}</p>
                 <p></p>
                 <button (click)="cancelConsulting(consulting.id)">Otkazi savetovanje</button>
               </div>
@@ -75,9 +75,9 @@
                 <div class="examIcon"></div>
                 <h3> ID examination : {{examination.id}}</h3>
                 <p>  Dermatologist : {{examination.dermatologist.name}} {{examination.dermatologist.lastname}}</p>
-                <p> pocetak: {{examination.startTime  | date:'shortTime'}}</p>
-                <p> kraj: {{examination.endTime | date:'shortTime'}}</p>
-                <p> datum: {{examination.startTime| date}}</p>
+                <p> Start time: {{examination.startTime  | date:'shortTime'}}</p>
+                <p> End time: {{examination.endTime | date:'shortTime'}}</p>
+                <p> Date: {{examination.startTime| date}}</p>
                 <p></p>
                 <button (click)="cancelExamination(examination.id)">Cancel examination</button>
               </div>

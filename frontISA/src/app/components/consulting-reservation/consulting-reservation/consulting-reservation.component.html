@@ -1,14 +1,14 @@
 
 <div class="kolona1">
 <div>
-<h3>Izaberite zeljeni datum savetovanja</h3>
+<h3>Choose date when you want consulting</h3>
   <input [formControl]="dateControl" type="date"  min="2018-01-01" max="2028-12-31"  (ngModelChange)="valuechangeDate($event)"  style="width: 80%;">
 
-  <h3>Izaberite vreme pocetka savetovanja</h3>
+  <h3>Choose starting time of consulting</h3>
 <input type="time" id="appt" name="appt" [formControl]="timeControl" (ngModelChange)="valuechange($event)"
        min="09:00" max="18:00" required  style="width: 80%;">
 
-  <button (click)="prvoFiltriranje()">Search</button>
+  <button (click)="prvoFiltriranje()" >  Search</button>
 
 
 </div>
@@ -18,7 +18,7 @@
 
 <div  *ngIf="pharmacyDiv">
   <H3>
-   Pronadjene apoteke
+   Available pharmacies
   </H3>
   <div>
     
@@ -45,11 +45,11 @@
               padding: 0 10px 10px;">
                 <div class="card">
                 <div class="pharmacyIcon"></div>
-                  <h3> Apoteka : {{pharmacy.name}}</h3>
-                  <p>Cena savetovanja : {{pharmacy.consultingPrice}}</p>
-                  <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
+                  <h3> Pharmacy : {{pharmacy.name}}</h3>
+                  <p>Price of consulting : {{pharmacy.consultingPrice}}</p>
+                  <p>Address : {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
                   <p>Rating: {{pharmacy.avgRate}}</p>
-                  <button (click)="showPharmacists(pharmacy.id)">Prikazi farmaceute</button>
+                  <button (click)="showPharmacists(pharmacy.id)"> Show pharmacists</button>
                 </div>
               </div>
         
@@ -66,7 +66,7 @@
 
 <div *ngIf="pharmacistDiv">
   <H3>
-    Slobodni farmaceuti
+    Available pharmacists
    </H3>
 
    <label>Sort by pharmacist rating:</label>
@@ -88,10 +88,10 @@
                padding: 0 10px 10px;" >
                  <div class="card">
                    <div class="examIcon"></div>
-                   <h3> Apotekar : {{pharmacist.name}}  {{pharmacist.lastname}}</h3>
-                   <p>Ocena:{{pharmacist.avgRate}} </p>
+                   <h3> Pharmacist : {{pharmacist.name}}  {{pharmacist.lastname}}</h3>
+                   <p>Rating :{{pharmacist.avgRate}} </p>
                    <p></p>
-                   <button (click)="makeReservation(pharmacist.id)">Zakazi pregled</button>
+                   <button (click)="makeReservation(pharmacist.id)">Make reservation</button>
                  </div>
                </div>
          

@@ -45,7 +45,7 @@
 </div>
 <div class="kolona2">
 
-<h3>Lek pronadjen u apotekama: </h3>
+<h3>Drug available in pharmacies: </h3>
 
 <div class="row">
   <ul>
@@ -73,10 +73,10 @@
 <div class="kolona3">
 
 <div  *ngIf="dateDiv">
-  <h3>Izaberite datum preuzimanja</h3>
+  <h3>Pick date of collection:</h3>
   <input [formControl]="dateStringControl" type="date"  min="2018-01-01" max="2028-12-31"  (ngModelChange)="valuechange($event)">
 
-  <button (click)="makeReservation()" [disabled]="reservation.reservedAt ==null">  Rezervisi lek</button>
+  <button (click)="makeReservation()" [disabled]="reservation.reservedAt ==null"> Make reservation</button>
 </div>
 
 </div>

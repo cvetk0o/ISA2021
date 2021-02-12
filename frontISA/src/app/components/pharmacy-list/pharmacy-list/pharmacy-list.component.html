@@ -15,7 +15,7 @@
   <button type="submit" [disabled]="!sortForm.valid">Submit</button>
 </form>
 <H3>
-  Rezultati pretrage:
+  Search results:
 </H3>
 
       <ul>
@@ -24,9 +24,9 @@
             <div class="column">
               <div class="card">
                 <div class="pharmacyIcon"></div>
-                <h3>Apoteka {{pharmacy.name}}</h3>
+                <h3>Pharmacy {{pharmacy.name}}</h3>
                 <p>{{pharmacy.description}}</p>
-                <p>Adresa: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
+                <p>Adress: {{pharmacy.address.country}} , {{pharmacy.address.city}} , {{pharmacy.address.street}}  {{pharmacy.address.number}}</p>
                 <p>Rating: {{pharmacy.avgRate}}</p>
                 <button (click)="goToPharmacyProfile(pharmacy.id)" > pharmacy profile</button>
               </div>
