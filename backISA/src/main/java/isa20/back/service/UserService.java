@@ -602,7 +602,8 @@ public class UserService
 		
 	}
 	
-	
+
+	// na svaka 2 sata provera da li je neka rezervacija prosla ukoliko jeste dodeljuje penal pacijentu
 	@Scheduled(fixedRate = 2*60*60*1000)
 	public void scheduleFixedRateTask() {
 	    System.out.println(
@@ -646,7 +647,7 @@ public class UserService
 	
 	
 	
-	
+	//penali se brisu svakog prvog u mesecu
 	@Scheduled(cron="0 0 0 1 1/1 ?")
 	public void brisanjePenala() {
 	    
