@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,7 +57,7 @@ public class DrugController
 	// napravi klasu itemdto koja ce imati id apoteke naziv apoteke cenu leka, ... vidi sta ti jos treba
 	
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/drugs/reservation")
 	public ResponseEntity< ApiResponse > makeDrugReservation(@RequestBody DrugReservationRequest request) throws ParseException, MessagingException {
 
@@ -65,19 +66,21 @@ public class DrugController
 		
 	}
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/drugs/alergie")
 	public List<Drug> addDrugToAlergieList(@RequestBody Long drugId) {
 		
 		return this.drugService.addDrugToAlergieList(drugId);
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/drugs/alergies")
 	public List< Drug > getMyAlergies() {
 		
 		return this.drugService.getMyAlergies();
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/drugs/alergies/{drugId}")
 	public List<Drug> removeDrugFromAlergieList(@PathVariable Long drugId){
 		
@@ -85,19 +88,19 @@ public class DrugController
 	}
 	
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/getMyDrugs")
 	public List<Drug> getMyPharmacies() {
 		return this.drugService.getMyDrugs();
 	}
 	
-
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/rateDrug")
 	public ResponseEntity< ApiResponse > rateDrug(@RequestBody RatingRequest request) {
 		return this.drugService.rateDrug( request );
 	}
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/overrideRateDrug")
 	public ResponseEntity< ApiResponse > overrideRateDrug(@RequestBody RatingRequest request) {
 		return this.drugService.overrideRateDrug( request );

@@ -64,6 +64,7 @@ public class PharmacyController
 	}
 	
 	
+	
 	@GetMapping("/searchPharm")
 	 public Iterable<Pharmacy> findAllByPharm(
 	      @QuerydslPredicate(root = Pharmacy.class) Predicate predicate) {
@@ -90,6 +91,7 @@ public class PharmacyController
 	
 		
 	}
+	
 	
 	@GetMapping("/sort/{propertie}/{order}")
 	public List<Pharmacy> sortPharmacie(@PathVariable String propertie , @PathVariable String order) {

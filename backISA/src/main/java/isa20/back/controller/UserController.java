@@ -68,13 +68,14 @@ public class UserController
 	}
 	
 	
-	
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/getMyInfo")
 	public ResponseEntity< User > getMyInfo() {
 		return UserService.getMyInfo();
 		
 	}
 	
+	@PreAuthorize("hasRole('PATIENT')")
 	@PostMapping("/user")
 	public ResponseEntity< ? > updateUserInfo(@RequestBody  final SignUpRequest request) {
 		
