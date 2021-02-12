@@ -218,7 +218,7 @@ values
 
 
 
--- INSERT INTO `isa20`.`user` ( )
+--USERS     za sve je password: "sifra"
 
 INSERT INTO `isa20`.`user`
 ( `dType`,`id`,`activated`,`email`,`lastname`,`name`,`password`,`phone_number` ,`penal`, `address_id`)
