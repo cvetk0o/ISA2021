@@ -4,10 +4,23 @@ Internet Software Architectures class project
 
 Technologies and platforms used in this project: 
 Spring Boot
-Angular 
+
+Angular
+
 MySQL
+
 Hibernate
 
+
+## To run backend application use Maven.
+
+
+## To run frontetn application use NPM
+```npm install ```
+
+```ng serve```
+
+front app is running on (http://localhost:4200/)
 
 
 Student 1: Petar Ponjević  - brani u ovom roku
