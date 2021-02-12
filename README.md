@@ -14,6 +14,7 @@ Hibernate
 
 ## To run backend application use Maven.
 
+ukoliko se koristi eclipse razvojno okruzenje pokrenuti projekat kao Spring Boot projekat
 
 ## To run frontetn application use NPM
 ```npm install ```
