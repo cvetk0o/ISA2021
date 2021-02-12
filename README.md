@@ -14,6 +14,8 @@ Hibernate
 
 ## To run backend application use Maven.
 
+mvn spring-boot:run
+
 koristeni SUBP je MySQL
 
 treba promeniti korisnicko ime i sifru za bazu podatak u application.properties fajlu
