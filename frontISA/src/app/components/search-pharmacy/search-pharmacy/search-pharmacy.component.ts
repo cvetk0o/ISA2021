@@ -17,9 +17,7 @@ export class SearchPharmacyComponent implements OnInit {
 
   searchForm = this.fb.group({
     name :[''],
-    city : [''],
-    consultingPriceFrom :[''],
-    consultingPriceTo :['']
+    city : ['']
   });
 
 
@@ -47,17 +45,8 @@ export class SearchPharmacyComponent implements OnInit {
             let kljuc = "address.city";
             params = params.append( kljuc, formValue[key]);
 
-          }else if (key ==="consultingPriceFrom"){
-            let kljuc = "consultingPrice";
-            params = params.append( kljuc, formValue[key]);
-            
-          }else if (key ==="consultingPriceTo"){
-            let kljuc = "consultingPrice";
-            params = params.append( kljuc, formValue[key]);
-          }else {
-
+          }else
             params = params.append(key , formValue[key]);
-          }
         }
     }
     console.log(params);  
